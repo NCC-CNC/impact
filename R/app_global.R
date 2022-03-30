@@ -1,49 +1,12 @@
 app_global <- quote({
 
-  library(shiny)
-  library(shinydashboard)
-  library(leaflet)
-  library(leaflet.extras)
-  library(leaflet.extras2)
-  library(shinyWidgets)
-  library(shinyFeedback)
-  library(htmltools)
-  library(htmlwidgets)
-  library(shinycssloaders)
-  library(readr)
-  library(shinyjs)
-  library(tidyverse)
-  library(sf)
-  library(plotly)
-  library(shinipsum)
-  library(kableExtra)
-  library(exactextractr)
-  library(terra)
-  library(dplyr)
-  library(tidyr)
-  library(purrr)
-  library(shinyBS)
-  library(DT)
 
   # Read-in basedata -------------------------------------------------------------
-  load(file.path("data", "03_clean", "basedata.RData"))
+  load(system.file("extdata", "03_clean", "basedata.RData", package = "impact"))
 
   # Read-in regional goals -------------------------------------------------------
-  goals_csv <- read_csv(file.path("data", "sheets", "Regional_goals.csv"))
+  goals_csv <- read_csv(system.file("extdata", "sheets", "Regional_goals.csv", package = "impact"))
 
-  # source shiny mods ------------------------------------------------------------
-  source(file.path("scripts", "mod_tables.R"))
-  source(file.path("scripts", "mod_extractions.R"))
-  source(file.path("scripts", "mod_report.R"))
-  source(file.path("scripts", "mod_comparison.R"))
-
-  # Source functions -------------------------------------------------------------
-  source(file.path("scripts", "fct_popup.R"))
-  source(file.path("scripts", "fct_plots.R"))
-  source(file.path("scripts", "fct_shpupload.R"))
-
-  # Source conservation themes ---------------------------------------------------
-  source(file.path("scripts", "server_load_themes.R"))
 
   # Species table inputs ---------------------------------------------------------
   pmp_attributes <- c("Property", "Name", "Region", "Area (ha)", "Species at Risk (ECCC)",
@@ -60,8 +23,6 @@ app_global <- quote({
                   "Wetland", "River", "Lakes", "Shoreline", "Climate_velocity",
                   "Climate_refugia", "Carbon_current", "Carbon_potential", "Freshwater",
                   "Recreation")
-
-
 
 
 })
