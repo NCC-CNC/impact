@@ -13,5 +13,31 @@ Imports:
     golem (>= 0.3.2),
     shiny (>= 1.7.1)
 Encoding: UTF-8
+Depends:
+    R (>= 4.0.0),
+    shiny,
+    shinydashboard,
+    leaflet,
+    leaflet.extras,
+    leaflet.extras2,
+    shinyWidgets,
+    shinyFeedback,
+    htmltools,
+    htmlwidgets,
+    shinycssloaders,
+    readr,
+    shinyjs,
+    tidyverse,
+    sf,
+    plotly,
+    shinipsum,
+    kableExtra,
+    exactextractr,
+    terra,
+    dplyr,
+    tidyr,
+    purrr,
+    shinyBS,
+    DT
 LazyData: true
 RoxygenNote: 7.1.1
