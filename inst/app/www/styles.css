@@ -1,0 +1,147 @@
+
+/* nav bar */
+.navbar-default .navbar-brand{
+  color: #FFF;
+  font-family: Verdana;
+}
+
+.navbar-default {
+    background-color: #2D602E !important;
+}
+
+/* side panel */
+.side {
+  height: calc(100vh - 100px); 
+  overflow-y: scroll;
+  background-color: #FFF;
+  border: none;
+} 
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  width: 50%;
+}
+
+/* map side panel */
+#map_sidebar {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.sidebar-header{
+  background-color: #33862B !important;
+}
+
+.sidebar-tabs > li.active, .sidebar-tabs > ul > li.active {
+  background-color: #33862B !important;
+}
+
+.basemap-controls{
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  width: 135px;
+}
+
+.basemap-title {
+  z-index: 9999;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: -20px;
+  padding: 5px 0px;
+  background-color: #FFF;
+}
+
+.raster-controls{
+  position: absolute;
+  top: 5px;
+  left: 60px;
+  width: 135px;
+}
+
+.raster-title {
+  z-index: 9999;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: -20px;
+  padding: 5px 0px;
+  background-color: #FFF;
+}
+
+.info.legend.leaflet-control.sidelegend {
+  opacity: 1 !important;
+  z-index: 9999;
+  background: white;
+
+} 
+
+/* table and histogram titles */
+.property-title {
+  font-weight: 800;
+  font-family: Verdana;
+  text-align: left;
+  font-size: 16px;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  max-width: 400px;
+}
+  
+hr {
+  margin-top: 0px;
+}
+
+.shiny-notification-message {
+	background-color: #4BB543;
+	color:#000000;
+	font-weight: 900;
+}
+
+#shiny-notification-panel {
+  bottom: 60px;
+  right: 30px;
+}
+
+.progress-bar {
+  background-color: #33862B;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+  color: #FFF;
+  background-color: #33862B;
+  
+}
+
+.modal-lg {
+  width: 75vw;
+}
+
+.modal.sbs-modal {
+  z-index: 99999;
+}
+
+.modal-content {
+  overflow-x: scroll;
+}
+
+.modal-backdrop {
+  z-index: 9999;
+}
+
+.btn-compare .btn-default  {
+  color: #33862B;
+}
+
+a {
+  color: #2D602E;
+}
+
+.theme-selection {
+  font-weight: 800;
+  text-align: center !important;
+}
