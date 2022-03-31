@@ -5,12 +5,11 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  # Your application server logic ----
 
-  # Run server_load_themes.R
+  # Get inputs: ----------------------------------------------------------------
+
+  ## Run server_load_themes.R
   eval(server_load_themes)
-
-  # Get inputs: -------------------------------------------------------------------
 
   ## Conservation values (rasters) ----
   user_raster <- reactive({ as.character(input$raster_selection) })
@@ -33,7 +32,7 @@ app_server <- function(input, output, session) {
   compare_tbl <- reactive({ input$compare_tbl })
   compare_plt <- reactive({ input$compare_plt })
 
-  # Initialize leaflet map: ------------------------------------------------------
+  # Initialize leaflet map: ----------------------------------------------------
 
   output$ncc_map <- renderLeaflet({
     leaflet() %>%
@@ -71,13 +70,13 @@ app_server <- function(input, output, session) {
 
   })
 
-  # Listen for map click | pre-loaded PMPs: --------------------------------------
+  # Listen for map click | pre-loaded PMPs: ------------------------------------
 
   observeEvent(map_click(), {
 
     if(is.null(map_click()$id) | map_click()$group != "Project Mgmt. Plan" ){}
 
-    else {
+    else { # If map click has an id and the group ==  Project Mgmt. Plan"
 
       ## PMP user selection ----
       user_pmp <- PMP_tmp %>% dplyr::filter(id == as.numeric(map_click()$id))
@@ -100,10 +99,10 @@ app_server <- function(input, output, session) {
                        attributes = pmp_attributes,
                        con_values = pmp_values)
     }
-    # Close map-click
+  # Close map-click
   })
 
-  # Update map with conservation theme: ------------------------------------------
+  # Update map with conservation theme: ----------------------------------------
 
   observeEvent(user_raster(),{
 
@@ -132,7 +131,7 @@ app_server <- function(input, output, session) {
 
   })
 
-  # Display user PMP / extract themes: -------------------------------------------
+  # Display user PMP / extract themes: -----------------------------------------
 
   ## Listen for shp upload ----
   observeEvent(user_pmp_upload_path(), {
@@ -149,26 +148,26 @@ app_server <- function(input, output, session) {
   extracted  <- extractions_SERVER(id = "extractions_mod1", user_pmp,
                                    feat_stack, spp_stack, proxy)
 
-  ## Extractions completed ----
+  ## Extractions completed -----------------------------------------------------
   observeEvent(extracted$trigger, {
     if(extracted$flag == 1){
       shinyjs::enable("report_mod1-run_report")
       shinyjs::enable("compare_tbl")
       shinyjs::enable("compare_plt")
 
-      ## Listen for map click | new PMPs: --------------------------------------
+      ## Listen for map click
       observeEvent(map_click(), {
 
         if(is.null(map_click()$id) | map_click()$group != "User PMP" ){}
 
-        else {
+        else { # If map click has an id and the group ==  User PMP
 
+          # Subset extracted sf by id ----
           user_pmp_new <- extracted$user_pmp_mean %>%
             dplyr::filter(id == as.numeric(map_click()$id))
 
-          ## Generate histograms ----
+          ## Generate plots ----
           shinyjs::show(id = "conditional_plots")
-
           property_title_SERVER(id = "property_mod2", user_pmp_new)
           output$Area <- plot_theme("Area_ha", user_pmp_new, goals_csv, "Area (ha)")
           output$Forest <- plot_theme("Forest", user_pmp_new, goals_csv, "Forest (ha)")
@@ -184,7 +183,9 @@ app_server <- function(input, output, session) {
                            attributes = pmp_attributes,
                            con_values = pmp_values)
         }
+      # Close map click
       })
+    # Close extraction trigger
     }})
 
   # Comparison modal -----------------------------------------------------------
@@ -202,5 +203,5 @@ app_server <- function(input, output, session) {
     shinyjs::disable("compare_plt")
   })
 
-
+# Close app_server -------------------------------------------------------------
 }

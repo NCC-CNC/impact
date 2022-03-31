@@ -17,6 +17,7 @@ Depends:
     R (>= 4.0.0),
     shiny,
     shinydashboard,
+    shinyBS,
     leaflet,
     leaflet.extras,
     leaflet.extras2,
@@ -40,4 +41,4 @@ Depends:
     shinyBS,
     DT
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

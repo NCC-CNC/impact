@@ -3,94 +3,94 @@ server_load_themes <- quote({
 
 # Read-in themes ---------------------------------------------------------------
 # Forest
-frst <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "CA_forest_VLCE_2015_forest_only_ha_proj_scale.tif"))
+frst <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "CA_forest_VLCE_2015_forest_only_ha_proj_scale.tif", package = "impact"))
 
 # Grassland
-gras <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "AAFC_LU2015_comb_masked_by_Prairie_grassland_comb.tif"))
+gras <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "AAFC_LU2015_comb_masked_by_Prairie_grassland_comb.tif", package = "impact"))
 
 # Wetlands
-wetl <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "Wetland_comb_proj_diss_90m_Arc.tif"))
+wetl <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "Wetland_comb_proj_diss_90m_Arc.tif", package = "impact"))
 
 # Rivers
-rivr <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "grid_1km_water_linear_flow_length_1km.tif"))
+rivr <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "grid_1km_water_linear_flow_length_1km.tif", package = "impact"))
 
 # Lakes
-laks <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "Lakes_CanVec_50k_ha.tif"))
+laks <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "Lakes_CanVec_50k_ha.tif", package = "impact"))
 
 # Shoreline
-shrl <- rast(file.path(
-  "data", "02_intermediate", "HABITAT",
-  "Shoreline.tif"))
+shrl <- rast(system.file(
+  "extdata", "02_intermediate", "HABITAT",
+  "Shoreline.tif", package = "impact"))
 
 # Climate
-cfor <- rast(file.path(
-  "data", "02_intermediate", "CLIMATE",
-  "fwdshortestpath.tif"))
+cfor <- rast(system.file(
+  "extdata", "02_intermediate", "CLIMATE",
+  "fwdshortestpath.tif", package = "impact"))
 
-cref <- rast(file.path(
-  "data", "02_intermediate", "CLIMATE",
-  "NA_combo_refugia_sum45.tif"))
+cref <- rast(system.file(
+  "extdata", "02_intermediate", "CLIMATE",
+  "NA_combo_refugia_sum45.tif", package = "impact"))
 
 # Carbon
-csta <- rast(file.path(
-  "data", "02_intermediate", "CARBON",
-  "Carbon_Mitchell_2021_t.tif")) %>%
+csta <- rast(system.file(
+  "extdata", "02_intermediate", "CARBON",
+  "Carbon_Mitchell_2021_t.tif", package = "impact")) %>%
   terra::crop(cfor)
 
-cseq <- rast(file.path(
-  "data", "02_intermediate", "CARBON",
-  "Carbon_Potential_NFI_2011_CO2e_t_year.tif")) %>%
+cseq <- rast(system.file(
+  "extdata", "02_intermediate", "CARBON",
+  "Carbon_Potential_NFI_2011_CO2e_t_year.tif", package = "impact")) %>%
   terra::crop(cfor)
 
 # Freshwater
-fwat <- rast(file.path("data", "02_intermediate", "ES",
-  "water_provision_2a_norm.tif"))
+fwat <- rast(system.file("extdata", "02_intermediate", "ES",
+  "water_provision_2a_norm.tif", package = "impact"))
 
 # Recreation
-recr <- rast(file.path("data", "02_intermediate", "ES",
-  "rec_pro_1a_norm.tif"))
+recr <- rast(system.file("extdata", "02_intermediate", "ES",
+  "rec_pro_1a_norm.tif", package = "impact"))
 
 # Species at risk - ECCC
-SAR <- rast(file.path("data", "02_intermediate",
-  "SAR_sum.tif"))
+SAR <- rast(system.file("extdata", "02_intermediate",
+  "SAR_sum.tif", package = "impact"))
 
 # Amphibian - IUCN
-amph <- rast(file.path("data", "02_intermediate",
-  "amph_sum.tif"))
+amph <- rast(system.file("extdata", "02_intermediate",
+  "amph_sum.tif", package = "impact"))
 
 # Bird - IUCN
-bird <- rast(file.path("data", "02_intermediate",
-  "bird_sum.tif"))
+bird <- rast(system.file("extdata", "02_intermediate",
+  "bird_sum.tif", package = "impact"))
 
 # Mammal - IUCN
-mamm <- rast(file.path("data", "02_intermediate",
-  "bird_sum.tif"))
+mamm <- rast(system.file("extdata", "02_intermediate",
+  "bird_sum.tif", package = "impact"))
 
 # Reptile - ICUN
-rept <- rast(file.path("data", "02_intermediate",
-  "rept_sum.tif"))
+rept <- rast(system.file("extdata", "02_intermediate",
+  "rept_sum.tif", package = "impact"))
 
 # Species at risk - NatureServe Canada
-SAR_NSC <- rast(file.path("data", "02_intermediate",
-  "NSC_SARsum.tif"))
+SAR_NSC <- rast(system.file("extdata", "02_intermediate",
+  "NSC_SARsum.tif", package = "impact"))
 
 # Endemic species - NatureServe Canada
-END_NSC <- rast(file.path("data", "02_intermediate",
-  "NSC_ENDsum.tif"))
+END_NSC <- rast(system.file("extdata", "02_intermediate",
+  "NSC_ENDsum.tif", package = "impact"))
 
 # Several species - NatureServe Canada
-SPP_NSC <- rast(file.path("data", "02_intermediate",
-  "NSC_SPPsum.tif"))
+SPP_NSC <- rast(system.file("extdata", "02_intermediate",
+  "NSC_SPPsum.tif", package = "impact"))
 
 # Stack feature rasters --------------------------------------------------------
 
