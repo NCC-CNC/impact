@@ -36,9 +36,9 @@ app_server <- function(input, output, session) {
 
   output$ncc_map <- renderLeaflet({
     leaflet() %>%
-      addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
       addProviderTiles(providers$Esri.WorldImagery, group = "Imagery") %>%
       addProviderTiles(providers$Esri.WorldStreetMap, group = "Streets") %>%
+      addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
       fitBounds(-141.00002, 41.68132, -52.68001, 76.59341) %>%
 
       addSidebar(id = "map_sidebar",
@@ -64,7 +64,7 @@ app_server <- function(input, output, session) {
                                                     color = '#00ffd9')) %>%
 
       addLayersControl(overlayGroups = c("Project Mgmt. Plan"),
-                       baseGroups = c("Streets", "Imagery", "Topographic"),
+                       baseGroups = c("Topographic", "Imagery", "Streets"),
                        position = "bottomleft",
                        options = layersControlOptions(collapsed = F))
 
@@ -106,12 +106,13 @@ app_server <- function(input, output, session) {
 
   observeEvent(user_raster(),{
 
+
     if(user_raster() != F) {
 
       cons_pal <- colorNumeric(palette = "viridis", c(0,100))
       leafletProxy("ncc_map") %>%
         clearGroup(group= "convalue") %>%
-        addMapPane("raster_map", zIndex = 400) %>%
+        addMapPane("raster_map", zIndex = 900) %>%
         addTiles(urlTemplate = paste0("tiles/", user_raster(), "/{z}/{x}/{y}.png"),
                  options = pathOptions(pane = "raster_map"),
                  group = "convalue") %>%

@@ -1,12 +1,13 @@
 Package: impact
-Title: An Amazing Shiny App
+Title: NCC impact extractor
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
+    person(given = "Dan",
+           family = "Wismer",
            role = c("aut", "cre"),
-           email = "your@email.com")
-Description: What the package does (one paragraph).
+           email = "daniel.wismer@natureconservancy.ca")
+Description: Extracts conservation themes to new property boundaries and reports
+             metrics needed for an NCC project management plan.
 License: What license is it under?
 Imports: 
     config (>= 0.3.1),

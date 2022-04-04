@@ -1,12 +1,29 @@
 app_global <- quote({
 
+  # Get system environmental variables ----
+  env_data <- Sys.getenv("DATA_DIRECTORY")
+  env_tiles <- Sys.getenv("TILES_DIRECTORY")
 
-  # Read-in basedata -------------------------------------------------------------
-  load(system.file("extdata", "03_clean", "basedata.RData", package = "impact"))
+  ## Assign data directory: basedata ----
+  if (nchar(env_data) > 0) {
+    data_path <- env_data # Server
+  } else {
+    data_path <- system.file("extdata", package = "impact") # Local
+  }
+
+  ## Assign data directory: tiles ----
+  if (nchar(env_tiles) > 0) {
+    tile_path <- env_tiles
+  } else {
+    tile_path <- system.file("extdata", "tiles", package = "impact")
+    print(tile_path)
+  }
+
+  # Read-in basedata -----------------------------------------------------------
+  load(file.path(data_path, "basedata.RData"))
 
   # Read-in regional goals -------------------------------------------------------
-  goals_csv <- read_csv(system.file("extdata", "sheets", "Regional_goals.csv", package = "impact"))
-
+  goals_csv <- read_csv(file.path(data_path, "goals.csv"))
 
   # Species table inputs ---------------------------------------------------------
   pmp_attributes <- c("Property", "Name", "Region", "Area (ha)", "Species at Risk (ECCC)",

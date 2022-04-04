@@ -79,7 +79,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
        # Finish progress bar
        incProgress(3)
        removeNotification(id_)
-       showNotification("... Extractions Completed!", duration = 0, closeButton=TRUE, type = 'message')
+       showNotification("... Extractions Completed!", duration = 5, closeButton=TRUE, type = 'message')
 
      # Close try
      },
@@ -87,8 +87,8 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
      # Show error message
      error = function(err){
        removeNotification(id_)
-       showNotification("ERROR!", type = 'err', duration = 0, closeButton=close)
-       showNotification(paste0(err), type = 'err', duration = 0, closeButton=close)
+       showNotification("ERROR!", type = 'err', duration = 5, closeButton=close)
+       showNotification(paste0(err), type = 'err', duration = 5, closeButton=close)
      })
 
    # Close progress bar
