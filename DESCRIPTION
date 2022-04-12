@@ -1,45 +1,46 @@
 Package: impact
-Title: NCC impact extractor
+Title: Extract Conservation Themes to Project Management Plans 
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Dan",
-           family = "Wismer",
-           role = c("aut", "cre"),
-           email = "daniel.wismer@natureconservancy.ca")
-Description: Extracts conservation themes to new property boundaries and reports
-             metrics needed for an NCC project management plan.
+    person("Dan", "Wismer", , "daniel.wismer@natureconservancy.ca", role = c("aut", "cre"))
+Description: Extracts conservation themes to new project management plans (PMP) and
+    reports the contribution to advancing towards regional goals.
 License: What license is it under?
-Imports: 
-    config (>= 0.3.1),
-    golem (>= 0.3.2),
-    shiny (>= 1.7.1)
-Encoding: UTF-8
 Depends:
-    R (>= 4.0.0),
-    shiny,
-    shinydashboard,
-    shinyBS,
+    dplyr,
+    DT,
+    exactextractr,
+    ggplot2,
+    htmltools,
+    htmlwidgets,
     leaflet,
     leaflet.extras,
     leaflet.extras2,
-    shinyWidgets,
-    shinyFeedback,
-    htmltools,
-    htmlwidgets,
-    shinycssloaders,
-    readr,
-    shinyjs,
-    tidyverse,
-    sf,
     plotly,
-    shinipsum,
-    kableExtra,
-    exactextractr,
-    terra,
-    dplyr,
-    tidyr,
     purrr,
+    R (>= 4.0.0),
+    readr,
+    sf,
+    shinipsum,
+    shiny,
     shinyBS,
-    DT
+    shinycssloaders,
+    shinydashboard,
+    shinyFeedback,
+    shinyjs,
+    shinyWidgets,
+    terra,
+    tidyr
+Imports: 
+    config (>= 0.3.1),
+    golem (>= 0.3.2),
+    pkgload (>= 1.2.4),
+    assertthat (>= 0.2.1)
+Suggests: 
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
 LazyData: true
 RoxygenNote: 7.1.2

@@ -25,7 +25,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
      tryCatch({
 
        # Feature themes---------------------------------------------------------
-       id_ <<- showNotification("... feature themes", duration = 0, closeButton=close)
+       id_ <- showNotification("... feature themes", duration = 0, closeButton=close)
 
        # Extract
        user_pmp_feat <- exact_extract(feat_stack, user_pmp(), fun = "sum", force_df = TRUE)
@@ -36,7 +36,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
        # Species themes---------------------------------------------------------
        incProgress(2)
        removeNotification(id_)
-       id_ <<- showNotification("... species themes", duration = 0, closeButton=close)
+       id_ <- showNotification("... species themes", duration = 0, closeButton=close)
 
        # Extract
        user_pmp_spp <- exact_extract(spp_stack, user_pmp(), fun = "max", force_df = TRUE)

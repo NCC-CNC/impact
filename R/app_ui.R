@@ -109,7 +109,7 @@ app_ui <- function(request) {
     tags$div( class = "raster-controls",
     h4(class = "raster-title", "Impact Themes"),
     selectInput(
-    inputId = "raster_selection", "", width = "100%",
+    inputId = "theme_selection", "", width = "100%",
     choices = c("No Selection" = F, "Forest %" = "forest",
                 "Grassland" = "grassland","Wetland" = "wetland",
                 "River" = "river", "Lakes" = "Lakes"))),
