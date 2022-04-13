@@ -23,8 +23,6 @@ app_global <- quote({
   assertthat::assert_that(file.exists(tile_path), msg = paste0("Can't find tiles in: ", tile_path))
 
   # Read-in basedata -----------------------------------------------------------
-  print(dir(data_path))
-
   load(file.path(data_path, "basedata.RData"))
 
   # Read-in regional goals -------------------------------------------------------
@@ -45,6 +43,5 @@ app_global <- quote({
                   "Wetland", "River", "Lakes", "Shoreline", "Climate_velocity",
                   "Climate_refugia", "Carbon_current", "Carbon_potential", "Freshwater",
                   "Recreation")
-
 
 })
