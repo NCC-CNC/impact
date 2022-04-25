@@ -30,6 +30,10 @@ app_server <- function(input, output, session) {
   shinyjs::disable("compare_tbl")
   shinyjs::disable("compare_plt")
 
+  ## Tool tips ----
+  addTooltip(session, id = "map_sidebar", title = "Open / Close map sidebar",
+             placement = "top", trigger = "hover")
+
 #===============================================================================
   # Mapping workflow -----------------------------------------------------------
 

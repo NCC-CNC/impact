@@ -21,7 +21,7 @@ app_ui <- function(request) {
       tabsetPanel(
         tabPanel("Overview",
           br(),
-          wellPanel(random_text(nwords = 150)),
+          wellPanel(includeMarkdown( app_sys("app/text/overview.md"))),
 
           # Logo
           img(class='logo', src='www/logos/stacked_logo_rgb_en.png')),
@@ -34,7 +34,11 @@ app_ui <- function(request) {
           label = "Compare", icon = icon("sliders-h"))),
 
           property_title_UI(id = "property_mod1"),
-          pmp_table_UI(id = "pmp_table_mod1"), width="100%"),
+          pmp_table_UI(id = "pmp_table_mod1"),
+          br(),br(),
+          wellPanel(includeMarkdown(app_sys("app/text/table.md"))),
+
+          width="100%"),
 
         ## Plots ----
         tabPanel("Plots",
@@ -53,7 +57,10 @@ app_ui <- function(request) {
             plotlyOutput("Grassland",height=100,width="100%"),
             plotlyOutput("Wetland",height=100,width="100%"),
             plotlyOutput("River",height=100,width="100%"),
-            plotlyOutput("Lakes",height=100,width="100%")))))),
+            plotlyOutput("Lakes",height=100,width="100%"))))),
+
+          br(),br(),
+          wellPanel(includeMarkdown(app_sys("app/text/plot.md")))),
 
         ## Engagement ----
         tabPanel("Engagement",
@@ -77,10 +84,10 @@ app_ui <- function(request) {
 
           ### Upload shapefile ----
           sidebar_pane(
-            title = "New Property Assessment", id = "upload_sp",
+            title = "New PMP", id = "upload_sp",
             icon = icon("caret-right"),
             br(),
-            wellPanel(random_text(nwords = 75)),
+            wellPanel(includeMarkdown(app_sys("app/text/shp1.md"))),
 
             # File upload
             fluidRow(column(9,
@@ -94,8 +101,9 @@ app_ui <- function(request) {
             column(3,
             actionButton(inputId = "clear_pmp", label = "Clear", width = "100%"))),
 
+            wellPanel(includeMarkdown(app_sys("app/text/shp2.md"))),
+
             # Extractions button
-            hr(),
             extractions_UI(id = "extractions_mod1"),
 
             # Report button
