@@ -47,14 +47,14 @@ plot_theme <- function(theme, sf, goals_csv, label = NULL) {
   renderPlotly({
 
     bar1(current = goals_csv %>%
-           filter(Regions == sf$Regions) %>%
+           filter(Regions == sf$REGION) %>%
            filter(Category == "current") %>%
            pull(theme) %>% round(0),
 
          potential = round (sf[[theme]], 1),
 
          goal = goals_csv %>%
-           filter(Regions == sf$Regions) %>%
+           filter(Regions == sf$REGION) %>%
            filter(Category == "goal") %>%
            pull(theme) %>% round(0),
 
@@ -64,21 +64,23 @@ plot_theme <- function(theme, sf, goals_csv, label = NULL) {
 
 # Test plots -------------------------------------------------------------------
 
-# pmp_selection <- PMP_sub %>% dplyr::filter(NAME == 'Boreal A9 (outside of Birch River Wildland Park)')
+# pmp_selection <- PMP_tmp %>% dplyr::filter(NAME == 'Lot 5 363 740')
 #
 # current <- goals_csv %>%
-#   filter(Regions == pmp_selection$Regions) %>%
+#   filter(Regions == pmp_selection$REGION) %>%
 #   filter(Category == "current") %>%
 #   pull("Forest")
 #
 # potential <- pmp_selection[["Forest"]]
 #
 # goal <- goals_csv %>%
-#   filter(Regions == pmp_selection$Regions) %>%
+#   filter(Regions == pmp_selection$REGION) %>%
 #   filter(Category == "goal") %>%
 #   pull("Forest")
 #
 #
 # bar1(current, potential, goal)
+
+ # bc_pmp <- read_sf("../impactextractions/appdata/pmp/BC_Securement_FY23_24.shp")
 
 

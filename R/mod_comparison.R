@@ -10,7 +10,8 @@ comparison_UI <- function(id) {
 }
 
 comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
-                              user_pmp_mean, map_click, goals_csv) {
+                              user_pmp_mean, map_click, goals_csv,
+                              user_pmp_property, user_pmp_parcel) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -18,12 +19,19 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
     # Listen to compare button
     observeEvent(modal_trigger() , {
 
+
       # Do not execute until comparison button is clicked
       if (compare_tbl() !=0 | compare_plt() !=0) {
 
+        print(user_pmp_property())
+
         # Build table, 1 feature per row
-        pmp_table_SERVER(id = "pmp_table_mod2", data = user_pmp_mean(),
-                         attributes = pmp_attributes, con_values = pmp_values)
+        pmp_table_SERVER(id = "pmp_table_mod2",
+                         data = user_pmp_mean(),
+                         attributes = pmp_attributes,
+                         con_values = pmp_values,
+                         property = user_pmp_property(),
+                         parcel = user_pmp_parcel())
 
         ## Advance ghost trigger to queue modal pop up
         updateNumericInput(session = session, inputId = 'ghost_trigger',
@@ -86,32 +94,32 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
                        # Dynamically generated plots
                        conditionalPanel(
                         condition = "input.theme_selection == 'Area (ha)'", ns = ns,
-                        withSpinner(color = "#33862B", size = 1,
+                        withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                         area_plots)),
 
                        conditionalPanel(
                          condition = "input.theme_selection == 'Forest (ha)'", ns = ns,
-                         withSpinner(color = "#33862B", size = 1,
+                         withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          forest_plots)),
 
                        conditionalPanel(
                          condition = "input.theme_selection == 'Grassland (ha)'", ns = ns,
-                         withSpinner(color = "#33862B", size = 1,
+                         withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          grassland_plots)),
 
                        conditionalPanel(
                          condition = "input.theme_selection == 'Wetland (ha)'", ns = ns,
-                         withSpinner(color = "#33862B", size = 1,
+                         withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          wetland_plots)),
 
                        conditionalPanel(
                          condition = "input.theme_selection == 'River (km)'", ns = ns,
-                         withSpinner(color = "#33862B", size = 1,
+                         withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          river_plots)),
 
                        conditionalPanel(
                          condition = "input.theme_selection == 'Lakes (ha)'", ns = ns,
-                         withSpinner(color = "#33862B", size = 1,
+                         withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          lake_plots))))
 
             # Close bsModal

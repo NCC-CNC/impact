@@ -4,12 +4,12 @@ extractions_UI <- function(id) {
   tagList(
     br(),
     fluidRow(column(8, offset = 2, align = "center",
-    actionButton(inputId = ns("run_extractions"), label = "Extract Impact Themes",
+    actionButton(inputId = ns("run_extractions"), label = "Extract Impact Features",
                  icon = icon("play"), width = "100%")))
   )
 }
 
-extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
+extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_pmp_region) {
   moduleServer(id, function(input, output, session) {
 
     # Return
@@ -27,8 +27,12 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
        # Feature themes---------------------------------------------------------
        id_ <- showNotification("... feature themes", duration = 0, closeButton=close)
 
+       # Project to Canada Albers Equal Area Conic (national grid)
+       user_pmp_102001 <- user_pmp() %>%
+         st_transform(crs = st_crs("+proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"))
+
        # Extract
-       user_pmp_feat <- exact_extract(feat_stack, user_pmp(), fun = "sum", force_df = TRUE)
+       user_pmp_feat <- exact_extract(feat_stack, user_pmp_102001, fun = "sum", force_df = TRUE)
        names(user_pmp_feat) <- gsub("sum.", "", names(user_pmp_feat))
        user_pmp_feat <- user_pmp_feat %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
@@ -39,18 +43,25 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
        id_ <- showNotification("... species themes", duration = 0, closeButton=close)
 
        # Extract
-       user_pmp_spp <- exact_extract(spp_stack, user_pmp(), fun = "max", force_df = TRUE)
+       user_pmp_spp <- exact_extract(spp_stack, user_pmp_102001, fun = "max", force_df = TRUE)
        names(user_pmp_spp) <- gsub("max.", "", names(user_pmp_spp))
        user_pmp_spp<- user_pmp_spp %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
 
        # Combine all extractions into one sf object ----------------------------
-       user_pmp_mean <- cbind(user_pmp(), user_pmp_feat, user_pmp_spp) %>%
-         st_transform(crs = st_crs(4326)) %>% # WGS 84
-         st_make_valid()
+       user_pmp_mean <- cbind(user_pmp_102001, user_pmp_feat, user_pmp_spp)
 
-       # Assign unique-ID
-       user_pmp_mean$id <- 1:nrow(user_pmp_mean)
+       # Clean geometry, populate id, REGION and NAME field
+       user_pmp_mean <- user_pmp_mean %>%
+         st_make_valid() %>%
+         mutate("id" = row_number()) %>%
+         mutate("REGION" = user_pmp_region())
+
+       # Calculate area ha
+       user_pmp_mean$Area_ha <- units::drop_units(units::set_units(st_area(user_pmp_mean), value = ha))
+
+       # Project to WGS
+       user_pmp_mean <- st_transform(user_pmp_mean, crs = st_crs(4326))
 
        # Update map---------------------------------------------------------------
        user_extent <- st_bbox(user_pmp_mean)
@@ -61,7 +72,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy) {
          addPolygons(data = user_pmp_mean,
                      layerId = ~id, # click event id selector
                      #label = ~htmlEscape(NAME),
-                     #popup = PMP_popup(user_pmp_mean),
+                     popup = PMP_popup(user_pmp_mean, user = T),
                      options = pathOptions(clickable = TRUE),
                      weight = 1,
                      fillColor = "green",

@@ -1,3 +1,11 @@
+h2 {
+  margin-top: 0px;
+}
+
+code {
+  color: #33862B;
+  font-size: 100%;
+}
 
 /* nav bar */
 .navbar-default .navbar-brand{
@@ -64,6 +72,13 @@
   width: 135px;
 }
 
+.region-controls{
+  position: absolute;
+  top: 5px;
+  left: 200px;
+  width: auto;
+}
+
 .raster-title {
   z-index: 9999;
   text-align: center;
@@ -71,7 +86,9 @@
   font-weight: bold;
   margin-bottom: -20px;
   padding: 5px 0px;
-  background-color: #FFF;
+  color: #000;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+
 }
 
 .info.legend.leaflet-control.sidelegend {
@@ -90,6 +107,10 @@
   margin-top: 18px;
   margin-bottom: 10px;
   max-width: 400px;
+}
+
+.parcel-title {
+  font-family: Verdana;
 }
 
 hr {
@@ -149,3 +170,4 @@ a {
 .sidebar-content {
   background-color: rgba(255, 255, 255, 0.8) !important;;
   }
+

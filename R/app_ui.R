@@ -76,8 +76,9 @@ app_ui <- function(request) {
       mainPanel(class = "main",
 
       ## NCC map ----
+      withSpinner(color = "#33862B", size = 2, proxy.height = "100vh",
       leafletOutput(outputId = "ncc_map",
-                    height = "calc(100vh - 100px)", width = "100%"),
+                    height = "calc(100vh - 100px)", width = "100%")),
 
         ## Map sidebars---------------------------------------------------------
         sidebar_tabs(id = "map_sidebar", list(icon("upload")),
@@ -101,6 +102,22 @@ app_ui <- function(request) {
             column(3,
             actionButton(inputId = "clear_pmp", label = "Clear", width = "100%"))),
 
+            # Property and parcel name
+            fluidRow(
+              column(4,
+              pickerInput(inputId = "region", "Region", width = "100%",
+                          options = pickerOptions(noneSelectedText = "NA"),
+                          choices = c())),
+
+              column(4,
+              pickerInput(inputId = "property", "Property", width = "100%",
+                          options = pickerOptions(noneSelectedText = "NA"),
+                                choices = c())),
+              column(4,
+              pickerInput(inputId = "parcel", "Parcel", width = "100%",
+                            options = pickerOptions(noneSelectedText = "NA"),
+                            choices = c()))),
+
             wellPanel(includeMarkdown(app_sys("app/text/shp2.md"))),
 
             # Extractions button
@@ -115,12 +132,26 @@ app_ui <- function(request) {
 
     # Conservation themes ------------------------------------------------------
     tags$div( class = "raster-controls",
-    h4(class = "raster-title", "Impact Themes"),
+    h4(class = "raster-title", "Impact Features"),
     selectInput(
     inputId = "theme_selection", "", width = "100%",
     choices = c("No Selection" = F, "Forest %" = "forest",
                 "Grassland" = "grassland","Wetland" = "wetland",
                 "River" = "river", "Lakes" = "Lakes"))),
+
+    # Region Selection (achievements) -------------------------------------------
+    tags$div( class = "region-controls",
+              h4(class = "raster-title", "Region Achievements"),
+              pickerInput(multiple = T,
+                inputId = "Id083", "", width = "100%",
+                choices = c("British Columbia",
+                            "Alberta",
+                            "Saskatchewan",
+                            "Manitoba",
+                            "Ontario",
+                            "Quebec",
+                            "Atlantic",
+                            "Yukon"))),
 
     # Comparison modal ---------------------------------------------------------
     comparison_UI(id = "compare_mod1")

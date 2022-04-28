@@ -76,7 +76,7 @@ demo-kill:
 
 ## launch released version inside Docker container
 launch:
-	docker run -dp 3838:3838 --name impact -it naturecons/impact
+	docker run -dp 3838:3838 --name impact -v C:\Github\impactextractions\appdata -v C:\Github\impactextractions\appdata\tiles:/appdata/tiles -it naturecons/impact
 
 launch-kill:
 	docker rm --force impact
