@@ -74,6 +74,10 @@ server_initmap <- quote ({
   observeEvent(user_pmp_upload_path(), {
     display_shp(user_pmp, "ncc_map")
 
+    # Fields in attribute table
+    remove <- c("geometry", "id")
+    user_pmp_fields <- setdiff(colnames(user_pmp()), remove)
+
     # update region selection from user_pmp attribute table
     updatePickerInput(session, "region",
                       label = "Region",
@@ -85,12 +89,12 @@ server_initmap <- quote ({
     # update property selection from user_pmp attribute table
     updatePickerInput(session, "property",
                       label = "Property",
-                      choices = colnames(user_pmp()))
+                      choices = user_pmp_fields)
 
     # update parcel selection from user_pmp attribute table
     updatePickerInput(session, "parcel",
                       label = "Parcel",
-                      choices = c(colnames(user_pmp())))
+                      choices = user_pmp_fields)
 
     shinyjs::enable("extractions_mod1-run_extractions")
 

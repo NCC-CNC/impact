@@ -85,12 +85,12 @@ app_ui <- function(request) {
 
           ### Upload shapefile ----
           sidebar_pane(
-            title = "New PMP", id = "upload_sp",
+            title = "Project Mgmt. Plan", id = "upload_sp",
             icon = icon("caret-right"),
             br(),
-            wellPanel(includeMarkdown(app_sys("app/text/shp1.md"))),
 
             # File upload
+            wellPanel(includeMarkdown(app_sys("app/text/shp1a.md"))),
             fluidRow(column(9,
             fileInput(label = NULL,
             buttonLabel = tags$div("Upload", icon("upload"), style = "width: 90px"),
@@ -103,6 +103,7 @@ app_ui <- function(request) {
             actionButton(inputId = "clear_pmp", label = "Clear", width = "100%"))),
 
             # Property and parcel name
+            wellPanel(includeMarkdown(app_sys("app/text/shp1b.md"))),
             fluidRow(
               column(4,
               pickerInput(inputId = "region", "Region", width = "100%",
@@ -118,14 +119,13 @@ app_ui <- function(request) {
                             options = pickerOptions(noneSelectedText = "NA"),
                             choices = c()))),
 
-            wellPanel(includeMarkdown(app_sys("app/text/shp2.md"))),
-
             # Extractions button
+            wellPanel(includeMarkdown(app_sys("app/text/shp2.md"))),
             extractions_UI(id = "extractions_mod1"),
 
-            # Report button
+            # Report button, hide for now ...
             br(),
-            report_UI(id = "report_mod1"))
+            hidden(report_UI(id = "report_mod1")))
 
           # Close map-upload sidebar
           ),
@@ -135,9 +135,9 @@ app_ui <- function(request) {
     h4(class = "raster-title", "Impact Features"),
     selectInput(
     inputId = "theme_selection", "", width = "100%",
-    choices = c("No Selection" = F, "Forest %" = "forest",
-                "Grassland" = "grassland","Wetland" = "wetland",
-                "River" = "river", "Lakes" = "Lakes"))),
+    choices = c("No Selection" = F, "Forest(%)" = "forest",
+                "Grassland(%)" = "grassland","Wetland(%)" = "wetland",
+                "River(km)" = "rivers", "Lakes(%)" = "Lakes"))),
 
     # Region Selection (achievements) -------------------------------------------
     tags$div( class = "region-controls",

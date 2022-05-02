@@ -37,19 +37,48 @@ pmp_table_UI <- function(id) {
   )
 }
 
-pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel) {
+pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
+                             region, goals_csv, dt_proxy = NULL, modal = F) {
   moduleServer(id, function(input, output, session) {
-    output$pmp_table <- renderDT({
 
-      PMP_table(
-        data = data,
-        attributes = attributes,
-        con_values = con_values,
-        property = property,
-        parcel = parcel
-      )
-    })
-  })
+    # Render empty table ----
+    if (modal == F & is.null(dt_proxy)) {
+      output$pmp_table <- renderDT({
+        pmp_empty_table(attributes = attributes)
+    })}
+
+    # Update table with pulled values ----
+    if (modal == F & !is.null(dt_proxy)) {
+
+      DT::replaceData(
+        proxy = dt_proxy,
+        resetPaging = FALSE,
+        rownames = FALSE,
+        PMP_table(
+          data = data,
+          attributes = attributes,
+          con_values = con_values,
+          property = property,
+          parcel = parcel,
+          region = region,
+          goals_csv = goals_csv)
+      )}
+
+    # Render modal table ----
+    if (modal == T & is.null(dt_proxy)) {
+
+      output$pmp_table <- renderDT({
+
+        PMP_table(
+          data = data,
+          attributes = attributes,
+          con_values = con_values,
+          property = property,
+          parcel = parcel,
+          region = region,
+          goals_csv = goals_csv)
+  })}
+})
 }
 
 #-------------------------------------------------------------------------------

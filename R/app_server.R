@@ -12,7 +12,7 @@ app_server <- function(input, output, session) {
   ## Conservation themes (rasters) ----
   user_theme <- reactive({ as.character(input$theme_selection) })
 
-  ## Region achievements (rasters) ----
+  ## Region achievements ----
   user_region <- reactive({ as.character(input$Id083) })
 
   ## Map click
@@ -66,8 +66,12 @@ app_server <- function(input, output, session) {
 
   ## Extract themes to uploaded pmps and update ncc_map ----
   proxy <- leafletProxy("ncc_map")
-  extracted  <- extractions_SERVER(id = "extractions_mod1", user_pmp, feat_stack,
-                                   spp_stack, proxy, user_pmp_region)
+  extracted  <- extractions_SERVER(id = "extractions_mod1",
+                                   user_pmp,
+                                   feat_stack,
+                                   spp_stack,
+                                   proxy,
+                                   user_pmp_region)
 
   ## Extractions successfully completed ----
   observeEvent(extracted$trigger, {
@@ -79,9 +83,15 @@ app_server <- function(input, output, session) {
   })
 
   ## Comparison modal ----
-  comparison_SERVER(id = "compare_mod1", modal_trigger, compare_tbl,
-                    compare_plt, reactive(extracted$user_pmp_mean),
-                    map_click, goals_csv, user_pmp_property, user_pmp_parcel)
+  comparison_SERVER(id = "compare_mod1",
+                    modal_trigger,
+                    compare_tbl,
+                    compare_plt,
+                    reactive(extracted$user_pmp_mean),
+                    map_click,
+                    goals_csv,
+                    user_pmp_property,
+                    user_pmp_parcel)
 
 #===============================================================================
 # Close app_server -------------------------------------------------------------

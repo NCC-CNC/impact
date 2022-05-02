@@ -23,15 +23,14 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
       # Do not execute until comparison button is clicked
       if (compare_tbl() !=0 | compare_plt() !=0) {
 
-        print(user_pmp_property())
-
         # Build table, 1 feature per row
         pmp_table_SERVER(id = "pmp_table_mod2",
                          data = user_pmp_mean(),
                          attributes = pmp_attributes,
                          con_values = pmp_values,
                          property = user_pmp_property(),
-                         parcel = user_pmp_parcel())
+                         parcel = user_pmp_parcel(),
+                         modal = T)
 
         ## Advance ghost trigger to queue modal pop up
         updateNumericInput(session = session, inputId = 'ghost_trigger',

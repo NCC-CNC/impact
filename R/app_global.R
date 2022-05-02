@@ -33,8 +33,8 @@ app_global <- quote({
                       "Amphibians (IUCN)", "Birds (IUCN)", "Mammals (IUCN)",
                       "Reptiles (IUCN)","Species at Risk (NSC)", "Endemics (NSC)",
                       "Biodiversity (NSC)", "Forest (ha)", "Grassland (ha)", "Wetland (ha)",
-                      "River (km)", "Lakes (ha)", "Shoreline (km)", "Climate Velocity", "Climate Refugia",
-                      "Carbon Current", "Carbon Potential", "Freshwater (ha)", "Recreation (ha)")
+                      "River (km)", "Lakes (ha)", "Shoreline (km)", "Climate Velocity (km/year)", "Climate Refugia (index)",
+                      "Carbon Current (tonnes)", "Carbon Potential (tonnes per year)", "Freshwater (ha)", "Recreation (ha)")
 
   pmp_values <- c("Area_ha","Species_at_Risk_ECCC",
                   "Amphibians_IUCN","Birds_IUCN","Mammals_IUCN",
