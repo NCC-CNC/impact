@@ -5,8 +5,8 @@ to securing `national conservation features`.
 
 **1)** Explore the achievements layer and view what is currently protected <br>
 **2)** Upload a new PMP and extract conservation features to parcels <br> 
-**3)** Compare conservation features between PMP boundaries and analyze currently protected, newly extracted and regional specific set goals <br>
-**4)** Download PMP extractions in polygon and table format
+**3)** Compare conservation features between boundaries  <br>
+**4)** Download extractions in polygon and table format
 
 <h3>Motivation</h3>
 Framed under the lens of resilient landscapes, the aim is to build a protected reserve network that is: 
