@@ -12,7 +12,7 @@ app_ui <- function(request) {
 
   navbarPage(
   "NCC Conservation Technology",
-  tabPanel(class="pmp_tool", "Project Evaluation",
+  tabPanel(class="pmp_tool", "Project Evaluation - DEV",
 
 # Side-panel:-------------------------------------------------------------
     sidebarLayout(
