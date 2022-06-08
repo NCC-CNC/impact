@@ -52,12 +52,12 @@ app_ui <- function(request) {
           withSpinner(color = "#33862B", size = 1,
           tagList(
             property_title_UI(id = "property_mod2"),
-            plotlyOutput("Area",height=100,width="100%"),
-            plotlyOutput("Forest",height=100,width="100%"),
-            plotlyOutput("Grassland",height=100,width="100%"),
-            plotlyOutput("Wetland",height=100,width="100%"),
-            plotlyOutput("River",height=100,width="100%"),
-            plotlyOutput("Lakes",height=100,width="100%"))))),
+            plotlyOutput("Area",height=115,width="100%"),
+            plotlyOutput("Forest",height=115,width="100%"),
+            plotlyOutput("Grassland",height=115,width="100%"),
+            plotlyOutput("Wetland",height=115,width="100%"),
+            plotlyOutput("River",height=115,width="100%"),
+            plotlyOutput("Lakes",height=115,width="100%"))))),
 
           br(),br(),
           wellPanel(includeMarkdown(app_sys("app/text/plot.md")))),
