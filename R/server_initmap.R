@@ -2,7 +2,8 @@ server_initmap <- quote ({
 
   # Initialize leaflet map: ----------------------------------------------------
   output$ncc_map <- renderLeaflet({
-    leaflet() %>%
+    leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
+      addTiles() %>%
       addProviderTiles(providers$Esri.WorldImagery, group = "Imagery") %>%
       addProviderTiles(providers$Esri.WorldStreetMap, group = "Streets") %>%
       addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
@@ -11,64 +12,76 @@ server_initmap <- quote ({
       addSidebar(id = "map_sidebar",
                  options = list(position = "right", fit = FALSE)) %>%
 
-      addMiniMap(tiles = providers$Esri.WorldStreetMap, toggleDisplay = T,
+       addMiniMap(toggleDisplay = T,
+                  tiles = providers$Esri.WorldStreetMap,
                  position = "bottomleft") %>%
 
       addMapPane("pmp_pane", zIndex = 600) %>% # Always top layer
 
-      addLayersControl(overlayGroups = c('Achievements'),
+      addLayersControl(overlayGroups = c('British Columbia', "Alberta",
+                        "Saskatchewan","Manitoba", "Ontario", "Quebec",
+                        "Atlantic","Yukon"),
                        baseGroups = c("Topographic", "Imagery", "Streets"),
                        position = "bottomleft",
-                       options = layersControlOptions(collapsed = F)) %>%
+                       options = layersControlOptions(collapsed = T)) %>%
 
-      hideGroup("Achievements")
+      # Style layer control titles
+      htmlwidgets::onRender("
+        function() {
+          $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:center\">Achievments</label>');
+          $('.leaflet-control-layers-list').prepend('<label style=\"text-align:center\">Basemaps</label>');
+        }
+    ") %>%
+
+      # Turn off all group layers
+      hideGroup("British Columbia") %>%
+      hideGroup("Alberta") %>%
+      hideGroup("Saskatchewan") %>%
+      hideGroup("Manitoba") %>%
+      hideGroup("Ontario") %>%
+      hideGroup("Quebec") %>%
+      hideGroup("Atlantic") %>%
+      hideGroup("Yukon")
 
   })
 
-  ## Display region achievement layer ----
-  observeEvent(user_region(), {
+  # Load achievement polygons by region when selected in layer controls.
+  # Only load once.
+  observeEvent(input$ncc_map_groups, {
+    # remove base groups
+    layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
+      c("Topographic","Imagery","Streets", "convalue", "User PMP"))]
 
-    if (length(user_region()) > 0) {
+    # Check that at least 1 of the overlay groups is toggled on
+    if (length(layer_on) > 0) {
 
-    # Filter by region
-    PMP_region <- PMP_tmp %>%
-      dplyr::filter(stringr::str_detect(REGION, user_region()))
+      # update cached list by adding
+      for(i in layer_on) {
+        cached[[i]] <<-  cached[[i]] + 1
+      }
 
-    # Get extent
-    region_extent <- st_bbox(PMP_region)
-    leafletProxy("ncc_map") %>%
-      fitBounds(lng1  = region_extent[[1]], lat1 = region_extent[[2]],
-                lng2 =  region_extent[[3]], lat2 =  region_extent[[4]]) %>%
+      # add polygon
+      for(name in  names(cached)){
 
-    # Add achievement polygon
-    clearGroup("Achievements") %>%
-    showGroup("Achievements") %>%
-    addPolygons(data = PMP_region,
-                layerId = ~id, # click event id selector
-                group = "Achievements",
-                fillColor = "#33862B",
-                color = "black",
-                weight = 1,
-                fillOpacity = 0.7,
-                label = ~htmlEscape(NAME),
-                popup = PMP_popup(PMP_region), # fct_popup.R
-                options = pathOptions(pane = "pmp_pane"),
-                highlightOptions = highlightOptions(weight = 3, color = '#00ffd9')) %>%
-
-      addLayersControl(overlayGroups = c("Achievements"),
-                       baseGroups = c("Topographic", "Imagery", "Streets"),
-                       position = "bottomleft",
-                       options = layersControlOptions(collapsed = F))
-
-
-    } else {
-      # Clear achievements and zoom out to Canada
-      leafletProxy("ncc_map") %>%
-        clearGroup("Achievements") %>%
-        hideGroup("Achievements") %>%
-        fitBounds(-141.00002, 41.68132, -52.68001, 76.59341)
-    }
-  })
+        if (cached[[name]] == 1) {
+          data <- achievements[name][[1]]
+          leafletProxy("ncc_map") %>%
+            addPolygons(data = data,
+                        group = name,
+                        layerId = ~id, # click event id selector
+                        label = ~htmlEscape(NAME),
+                        popup = PMP_popup(data), # fct_popup.R
+                        fillColor = "#33862B",
+                        color = "black",
+                        weight = 1,
+                        fillOpacity = 0.7,
+                        options = pathOptions(pane = "pmp_pane"),
+                        highlightOptions =
+                          highlightOptions(weight = 3, color = '#00ffd9'))
+          }
+        }
+     }
+    })
 
   ## Display updated user PMP ----
   observeEvent(user_pmp_upload_path(), {

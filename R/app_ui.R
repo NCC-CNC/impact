@@ -80,7 +80,7 @@ app_ui <- function(request) {
       leafletOutput(outputId = "ncc_map",
                     height = "calc(100vh - 100px)", width = "100%")),
 
-        ## Map sidebars---------------------------------------------------------
+        # Map sidebars---------------------------------------------------------
         sidebar_tabs(id = "map_sidebar", list(icon("upload")),
 
           ### Upload shapefile ----
@@ -138,20 +138,6 @@ app_ui <- function(request) {
     choices = c("No Selection" = F, "Forest(%)" = "forest",
                 "Grassland(%)" = "grassland","Wetland(%)" = "wetland",
                 "River(km)" = "rivers", "Lakes(%)" = "Lakes"))),
-
-    # Region Selection (achievements) -------------------------------------------
-    tags$div( class = "region-controls",
-              h4(class = "raster-title", "Region Achievements"),
-              pickerInput(multiple = T,
-                inputId = "Id083", "", width = "100%",
-                choices = c("British Columbia",
-                            "Alberta",
-                            "Saskatchewan",
-                            "Manitoba",
-                            "Ontario",
-                            "Quebec",
-                            "Atlantic",
-                            "Yukon"))),
 
     # Comparison modal ---------------------------------------------------------
     comparison_UI(id = "compare_mod1")

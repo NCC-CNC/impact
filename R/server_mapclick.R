@@ -14,7 +14,9 @@ server_mapclick <- quote ({
     req(map_click()$id)
 
     # Logic for baseinput PMPs ----
-    if(map_click()$group == "Achievements" ) {
+    if(map_click()$group %in% c("British Columbia", "Alberta","Saskatchewan",
+                                "Manitoba", "Ontario", "Quebec", "Atlantic",
+                                "Yukon")) {
 
       ## Subset achievement sf by id ----
       user_pmp <- PMP_tmp %>% dplyr::filter(id == as.numeric(map_click()$id))
@@ -24,7 +26,11 @@ server_mapclick <- quote ({
       print(user_region)
 
       ## Generate Table ----
-      property_title_SERVER(id = "property_mod1", data = user_pmp, property_field = "PROPERTY_N", parcel_field = "NAME")
+      property_title_SERVER(id = "property_mod1",
+                            data = user_pmp,
+                            property_field = "PROPERTY_N",
+                            parcel_field = "NAME")
+
       pmp_table_SERVER(id = "pmp_table_mod1",
                        data = user_pmp,
                        attributes = pmp_attributes,
@@ -36,7 +42,11 @@ server_mapclick <- quote ({
 
       ## Generate plots ----
       shinyjs::show(id = "conditional_plots")
-      property_title_SERVER(id = "property_mod2", data = user_pmp, property_field = "PROPERTY_N", parcel_field = "NAME")
+      property_title_SERVER(id = "property_mod2",
+                            data = user_pmp,
+                            property_field = "PROPERTY_N",
+                            parcel_field = "NAME")
+
       output$Area <- plot_theme("Area_ha", user_pmp, goals_csv,  "Area (ha)")
       output$Forest <- plot_theme("Forest", user_pmp, goals_csv, "Forest (ha)")
       output$Grassland <- plot_theme("Grassland", user_pmp, goals_csv, "Grassland (ha)")

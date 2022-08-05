@@ -39,11 +39,12 @@ display_shp <- function (user_shp, map_id) {
                     color = "black",
                     group = "User PMP") %>%
 
-        addLayersControl(overlayGroups = c("Achievements", "User PMP"),
+        addLayersControl(overlayGroups = c('British Columbia', "Alberta",
+                          "Saskatchewan","Manitoba", "Ontario", "Quebec",
+                          "Atlantic","Yukon","User PMP"),
                          baseGroups = c("Streets", "Imagery", "Topographic"),
                          position = "bottomleft",
-                         options = layersControlOptions(collapsed = F))
-
+                         options = layersControlOptions(collapsed = T))
     }
 }
 #-------------------------------------------------------------------------------

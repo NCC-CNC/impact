@@ -12,8 +12,8 @@ app_server <- function(input, output, session) {
   ## Conservation themes (rasters) ----
   user_theme <- reactive({ as.character(input$theme_selection) })
 
-  ## Region achievements ----
-  user_region <- reactive({ as.character(input$Id083) })
+  # ## Region achievements ----
+  # user_region <- reactive({ as.character(input$Id083) })
 
   ## Map click
   map_click <- reactive({input$ncc_map_shape_click})

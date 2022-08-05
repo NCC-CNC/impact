@@ -19,29 +19,50 @@ app_global <- quote({
   }
 
   ## Check paths
-  assertthat::assert_that(file.exists(data_path), msg = paste0("Can't find basedata.R in: ", data_path))
-  assertthat::assert_that(file.exists(tile_path), msg = paste0("Can't find tiles in: ", tile_path))
+  assertthat::assert_that(file.exists(data_path),
+    msg = paste0("Can't find basedata.R in: ", data_path))
+  assertthat::assert_that(file.exists(tile_path),
+    msg = paste0("Can't find tiles in: ", tile_path))
 
   # Read-in basedata -----------------------------------------------------------
   load(file.path(data_path, "basedata.RData"))
 
+  # Subset achievements by region
+  bc <- PMP_tmp %>% filter(REGION == "British Columbia")
+  ab <- PMP_tmp %>% filter(REGION == "Alberta")
+  sk <- PMP_tmp %>% filter(REGION == "Saskatchewan")
+  mb <- PMP_tmp %>% filter(REGION == "Manitoba")
+  on <- PMP_tmp %>% filter(REGION == "Ontario")
+  qc <- PMP_tmp %>% filter(REGION == "Quebec")
+  at <- PMP_tmp %>% filter(REGION == "Atlantic")
+  yk <- PMP_tmp %>% filter(REGION == "Yukon")
+
+  # create named list of achievements
+  achievements <- list("British Columbia" = bc, "Alberta" = ab,
+    "Saskatchewan" = sk, "Manitoba" = mb, "Ontario" = on, "Quebec" = qc,
+    "Atlantic" = at, "Yukon" = yk)
+
+  # Create a manual cache list that flags if data has been loaded
+  cached <- list("British Columbia" = 0, "Alberta" = 0,
+    "Saskatchewan" = 0, "Manitoba" = 0, "Ontario" = 0, "Quebec" = 0,
+     "Atlantic" = 0, "Yukon" = 0)
+
   # Read-in regional goals -------------------------------------------------------
-  goals_csv <- readr::read_csv(file.path(data_path, "goals.csv"),locale = readr::locale(encoding = "latin1"))
+  goals_csv <- readr::read_csv(file.path(data_path, "goals.csv"),
+    locale = readr::locale(encoding = "latin1"))
 
   # Species table inputs ---------------------------------------------------------
   pmp_attributes <- c("Area (ha)", "Species at Risk (ECCC)",
-                      "Amphibians (IUCN)", "Birds (IUCN)", "Mammals (IUCN)",
-                      "Reptiles (IUCN)","Species at Risk (NSC)", "Endemics (NSC)",
-                      "Biodiversity (NSC)", "Forest (ha)", "Grassland (ha)", "Wetland (ha)",
-                      "River (km)", "Lakes (ha)", "Shoreline (km)", "Climate Velocity (km/year)", "Climate Refugia (index)",
-                      "Carbon Current (tonnes)", "Carbon Potential (tonnes per year)", "Freshwater (ha)", "Recreation (ha)")
+    "Amphibians (IUCN)", "Birds (IUCN)", "Mammals (IUCN)","Reptiles (IUCN)",
+    "Species at Risk (NSC)", "Endemics (NSC)", "Biodiversity (NSC)",
+    "Forest (ha)", "Grassland (ha)", "Wetland (ha)", "River (km)", "Lakes (ha)",
+    "Shoreline (km)", "Climate Velocity (km/year)", "Climate Refugia (index)",
+    "Carbon Current (tonnes)", "Carbon Potential (tonnes per year)",
+    "Freshwater (ha)", "Recreation (ha)")
 
-  pmp_values <- c("Area_ha","Species_at_Risk_ECCC",
-                  "Amphibians_IUCN","Birds_IUCN","Mammals_IUCN",
-                  "Reptiles_IUCN","Species_at_Risk_NSC",
-                  "Endemics_NSC", "Biodiversity_NSC", "Forest", "Grassland",
-                  "Wetland", "River", "Lakes", "Shoreline", "Climate_velocity",
-                  "Climate_refugia", "Carbon_current", "Carbon_potential", "Freshwater",
-                  "Recreation")
-
+  pmp_values <- c("Area_ha","Species_at_Risk_ECCC","Amphibians_IUCN",
+    "Birds_IUCN","Mammals_IUCN","Reptiles_IUCN","Species_at_Risk_NSC",
+    "Endemics_NSC", "Biodiversity_NSC", "Forest", "Grassland", "Wetland",
+    "River", "Lakes", "Shoreline", "Climate_velocity", "Climate_refugia",
+    "Carbon_current", "Carbon_potential", "Freshwater", "Recreation")
 })
