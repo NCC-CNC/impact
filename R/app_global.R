@@ -28,14 +28,14 @@ app_global <- quote({
   load(file.path(data_path, "basedata.RData"))
 
   # Subset achievements by region
-  bc <- PMP_tmp %>% filter(REGION == "British Columbia")
-  ab <- PMP_tmp %>% filter(REGION == "Alberta")
-  sk <- PMP_tmp %>% filter(REGION == "Saskatchewan")
-  mb <- PMP_tmp %>% filter(REGION == "Manitoba")
-  on <- PMP_tmp %>% filter(REGION == "Ontario")
-  qc <- PMP_tmp %>% filter(REGION == "Quebec")
-  at <- PMP_tmp %>% filter(REGION == "Atlantic")
-  yk <- PMP_tmp %>% filter(REGION == "Yukon")
+  bc <- dplyr::filter(PMP_tmp, REGION == "British Columbia")
+  ab <- dplyr::filter(PMP_tmp, REGION == "Alberta")
+  sk <- dplyr::filter(PMP_tmp, REGION == "Saskatchewan")
+  mb <- dplyr::filter(PMP_tmp, REGION == "Manitoba")
+  on <- dplyr::filter(PMP_tmp, REGION == "Ontario")
+  qc <- dplyr::filter(PMP_tmp, REGION == "Quebec")
+  at <- dplyr::filter(PMP_tmp, REGION == "Atlantic")
+  yk <- dplyr::filter(PMP_tmp, REGION == "Yukon")
 
   # create named list of achievements
   achievements <- list("British Columbia" = bc, "Alberta" = ab,
