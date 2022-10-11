@@ -18,26 +18,36 @@ ncc_extent$id=1:length(ncc_extent)
 # Convert sf to geoJSON
 geoJ <-  sf_geojson(ncc_extent)
 
-# Create POST request
-url <- "https://native-land.ca/wp-json/nativeland/v1/api/index.php"
-body <- paste0('{"maps" : "territories", "polygon_geojson" :', geoJ, '}')
-r <- POST(url, body = body)
+# Native-Land.ca map requests
+map_request <- c("territories", "language", "treaties")
+for (request in map_request) {
 
-# Request content (geoJSON polygons that intersect NCC extent)
-native_lands <- content(r, "text")
+  print(paste0("...", request))
 
-# Convert to sf
-native_lands_sf <- geojson_sf(native_lands) %>%
-  st_zm() %>%
-  st_make_valid()
+  # Create POST request
+  url <- "https://native-land.ca/wp-json/nativeland/v1/api/index.php"
+  body <- paste0('{"maps" : "', request,'", "polygon_geojson" :', geoJ, '}')
+  r <- POST(url, body = body)
 
-# Read-in Canada shp
-canada <-  read_sf("inst/extdata/native_lands/canada_wgs.shp")
+  # Request content (geoJSON polygons that intersect NCC extent)
+  native_lands <- content(r, "text")
 
-# Intersect native lands with Canada
-int_native_lands <-  st_intersection(native_lands_sf, canada)
-# Subset native lands with intersection ID
-native_lands_canada <- native_lands_sf[native_lands_sf$ID %in% int_native_lands$ID, ]
+  # Convert to sf
+  native_lands_sf <- geojson_sf(native_lands) %>%
+    st_zm() %>%
+    st_make_valid()
 
-# Write to disk
-write_sf(native_lands_canada, "inst/extdata/native_lands/native_lands_canada.geojson")
+  # Read-in Canada shp
+  canada <-  read_sf("inst/extdata/native_lands/canada_wgs.shp")
+
+  # Intersect native lands with Canada
+  int_native_lands <-  st_intersection(native_lands_sf, canada)
+  # Subset native lands with intersection ID
+  native_lands_canada <- native_lands_sf[native_lands_sf$ID %in% int_native_lands$ID, ]
+
+  # Write to disk
+  write_sf(native_lands_canada, paste0("inst/extdata/native_lands/native_lands_", request, ".geojson"))
+
+}
+
+
