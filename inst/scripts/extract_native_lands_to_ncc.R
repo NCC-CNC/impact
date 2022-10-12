@@ -1,0 +1,33 @@
+library(sf)
+library(geojsonsf)
+library(dplyr)
+
+# Read-in NCC achievements layer
+ncc <- read_sf(file.path("inst", "extdata", "achievements", "NCC_Accomplishments_April_2022.shp"))
+ncc <- st_transform(ncc, crs = 4326)
+ncc <- ncc %>%
+  select(GIS_ID)
+
+# Read-in and rename native-lands.ca layers
+territories <- geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_territories.geojson")) %>%
+  rename(c(description_TER = description, Name_TER = Name, color_TER = color,
+           ID_TER = ID, Slug_TER = Slug, area_TER = area))
+
+languages <- geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_languages.geojson")) %>%
+  rename(c(description_LAN = description, Name_LAN = Name, color_LAN = color,
+           ID_LAN = ID, Slug_LAN = Slug, area_LAN = area))
+
+treaties <- geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_treaties.geojson")) %>%
+  rename(c(description_TRE = description, Name_TRE = Name, color_TRE = color,
+           ID_TRE = ID, Slug_TRE = Slug, area_TRE = area))
+
+# Merge native-land layers
+native_lands <- dplyr::bind_rows(list(territories,languages, treaties))
+
+# Intersect layers
+NCC_NL <- st_intersection(native_lands, ncc)
+
+# Drop geometry and save as geojson
+write_sf(NCC_NL, file.path("inst", "extdata", "native_lands", "native_lands_ncc.geojson"))
+
+

@@ -174,3 +174,12 @@ a {
 .modal-footer{
   display:none
 }
+
+/* engagment*/
+
+element.style {
+}
+.shiny-input-checkboxgroup.shiny-input-container-inline label~.shiny-options-group, .shiny-input-radiogroup.shiny-input-container-inline label~.shiny-options-group {
+  display: flex;
+  justify-content: space-evenly;
+}

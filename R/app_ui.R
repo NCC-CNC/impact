@@ -64,8 +64,18 @@ app_ui <- function(request) {
 
         ## Engagement ----
         tabPanel("Engagement",
+
+          property_title_UI(id = "property_mod3"),
+          eng_table_UI(id = "eng_table_mod1"),
+
           br(),
-          wellPanel(random_text(nwords = 75)))
+
+          ### Native-lands.ca layers
+          fluidRow(
+            radioButtons("native_lands", label = NULL,
+                         choices = c("Off", "Territories", "Languages", "Treaties"),
+                         inline = TRUE, width = '100%')
+          ))
 
         # Close tabsetPanel
         )

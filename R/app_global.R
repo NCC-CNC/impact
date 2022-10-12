@@ -65,4 +65,8 @@ app_global <- quote({
     "Endemics_NSC", "Biodiversity_NSC", "Forest", "Grassland", "Wetland",
     "River", "Lakes", "Shoreline", "Climate_velocity", "Climate_refugia",
     "Carbon_current", "Carbon_potential", "Freshwater", "Recreation")
+
+  # Read-in native lands intersected with NCC accomplishments ------------------
+  nl_ncc <- geojsonsf::geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_ncc.geojson"))
+
 })

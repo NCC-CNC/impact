@@ -1,11 +1,15 @@
 server_mapclick <- quote ({
 
-  # Initialize table
+  # Initialize empty title
   property_title_SERVER(id = "property_mod1", data = data.frame(p1 = " ", p2 = " "), property_field = "p1", parcel_field = "p2")
+
+  # Initialize empty table
   pmp_table_SERVER(id = "pmp_table_mod1", attributes = pmp_attributes)
+  eng_table_SERVER(id = "eng_table_mod1")
 
   # Set table proxy's
   dt_table_proxy <- DT::dataTableProxy('pmp_table_mod1-pmp_table')
+  dt_eng_table_proxy <- DT::dataTableProxy('eng_table_mod1-eng_table')
 
   # Listen for map click
   observeEvent(map_click(), {
@@ -23,7 +27,10 @@ server_mapclick <- quote ({
 
       ## Pull region
       user_region <- user_pmp %>% pull("REGION")
-      print(user_region)
+
+      ## Pull GIS_ID
+      GIS_ID <- user_pmp %>% pull("GIS_ID")
+      print(GIS_ID)
 
       ## Generate Table ----
       property_title_SERVER(id = "property_mod1",
@@ -53,6 +60,18 @@ server_mapclick <- quote ({
       output$Wetland <- plot_theme("Wetland", user_pmp, goals_csv, "Wetland (ha)")
       output$River <- plot_theme("River", user_pmp, goals_csv, "River (km)")
       output$Lakes <- plot_theme("Lakes", user_pmp, goals_csv, "Lakes (ha)")
+
+      ## Engagement ----
+      property_title_SERVER(id = "property_mod3",
+                            data = user_pmp,
+                            property_field = "PROPERTY_N",
+                            parcel_field = "NAME")
+
+      eng_table_SERVER(id = "eng_table_mod1",
+                       gis_id = GIS_ID,
+                       nl_ncc = nl_ncc,
+                       dt_proxy = dt_eng_table_proxy)
+
     }
 
     # Logic for file input PMPs ----

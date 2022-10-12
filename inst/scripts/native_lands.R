@@ -19,7 +19,7 @@ ncc_extent$id=1:length(ncc_extent)
 geoJ <-  sf_geojson(ncc_extent)
 
 # Native-Land.ca map requests
-map_request <- c("territories", "language", "treaties")
+map_request <- c("territories", "languages", "treaties")
 for (request in map_request) {
 
   print(paste0("...", request))
@@ -44,6 +44,21 @@ for (request in map_request) {
   int_native_lands <-  st_intersection(native_lands_sf, canada)
   # Subset native lands with intersection ID
   native_lands_canada <- native_lands_sf[native_lands_sf$ID %in% int_native_lands$ID, ]
+
+  # Remove USA
+  if (request == "treaties") {
+    remove <- c("point-elliott-treaty", "cession-642", "cession-532-2", "cession-373",
+                "cession-565", "cession-654", "cession-706", "cession-357", "cession-482",
+                "cession-332", "cession-205", "cession-66", "cession-53", "cession-695",
+                "cession-446")
+
+    native_lands_canada <- native_lands_canada  %>%
+      filter( !(native_lands_canada$Slug %in% remove))
+  }
+
+  # Calculate area
+  native_lands_canada$area <- st_area(native_lands_canada)
+  native_lands_canada <- arrange(native_lands_canada, -area)
 
   # Write to disk
   write_sf(native_lands_canada, paste0("inst/extdata/native_lands/native_lands_", request, ".geojson"))

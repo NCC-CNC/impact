@@ -83,3 +83,37 @@ pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
 
 #-------------------------------------------------------------------------------
 
+# Engagement table UI
+eng_table_UI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    DTOutput(outputId = ns("eng_table"))
+  )
+}
+
+# Engagement table SERVER
+eng_table_SERVER <- function(id, gis_id = NULL, nl_ncc = NULL, dt_proxy = NULL) {
+  moduleServer(id, function(input, output, session) {
+
+    # Render empty table ----
+    if (is.null(dt_proxy)) {
+      output$eng_table <- renderDT({
+        eng_empty_table()
+      }, escape = FALSE)
+
+    } else {
+
+      # Build native lands table ----
+      DT::replaceData(
+        proxy = dt_proxy,
+        resetPaging = FALSE,
+        rownames = FALSE,
+        eng_table(
+          gis_id = gis_id,
+          nl_ncc = nl_ncc
+        )
+      )}
+  })
+}
+
+
