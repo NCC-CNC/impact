@@ -23,11 +23,11 @@ eng_empty_table <- function() {
 }
 
 # Create native-lands.ca table
-eng_table <- function(gis_id, nl_ncc) {
+eng_table <- function(oid, nl_ncc) {
 
 
   # Extract attributes
-  native_lands <- nl_ncc %>% filter(GIS_ID == gis_id)
+  native_lands <- nl_ncc %>% filter(OBJECTID == oid)
   territories <- paste(purrr::discard(unique(native_lands$Name_TER), is.na), collapse = '<br>')
   languages <-  paste(purrr::discard(unique(native_lands$Name_LAN), is.na), collapse = '<br>')
   treaties <- paste(purrr::discard(unique(native_lands$Name_TRE), is.na), collapse = '<br>')
