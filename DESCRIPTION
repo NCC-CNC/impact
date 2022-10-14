@@ -16,6 +16,7 @@ Depends:
     leaflet,
     leaflet.extras,
     leaflet.extras2,
+    geojsonsf,
     plotly,
     purrr,
     R (>= 4.0.0),
