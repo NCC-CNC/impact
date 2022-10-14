@@ -10,9 +10,9 @@ server_engagement <- quote ({
       print(input$native_lands)
       switch(as.character(input$native_lands),
         "Off" = "off",
-         "Territories" = file.path("inst", "extdata", "native_lands", "native_lands_territories.geojson"),
-         "Languages" = file.path("inst", "extdata", "native_lands", "native_lands_languages.geojson"),
-         "Treaties" = file.path("inst", "extdata", "native_lands", "native_lands_treaties.geojson"))
+         "Territories" = file.path(data_path, "native_lands", "native_lands_territories.geojson"),
+         "Languages" = file.path(data_path, "native_lands", "native_lands_languages.geojson"),
+         "Treaties" = file.path(data_path, "native_lands", "native_lands_treaties.geojson"))
       })
 
     if (input$native_lands != "Off") {
