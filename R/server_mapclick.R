@@ -28,9 +28,8 @@ server_mapclick <- quote ({
       ## Pull region
       user_region <- user_pmp %>% pull("REGION")
 
-      ## Pull GIS_ID
-      GIS_ID <- user_pmp %>% pull("GIS_ID")
-      print(GIS_ID)
+      ## Pull ObjectID
+      OID <- user_pmp %>% pull("OBJECTID")
 
       ## Generate Table ----
       property_title_SERVER(id = "property_mod1",
@@ -68,7 +67,7 @@ server_mapclick <- quote ({
                             parcel_field = "NAME")
 
       eng_table_SERVER(id = "eng_table_mod1",
-                       gis_id = GIS_ID,
+                       oid = OID,
                        nl_ncc = nl_ncc,
                        dt_proxy = dt_eng_table_proxy)
 
@@ -109,6 +108,19 @@ server_mapclick <- quote ({
       output$Wetland <- plot_theme("Wetland", user_pmp_new, goals_csv, "Wetland (ha)")
       output$River <- plot_theme("River", user_pmp_new, goals_csv, "River (km)")
       output$Lakes <- plot_theme("Lakes", user_pmp_new, goals_csv, "Lakes (ha)")
+
+      ## Engagement ----
+      OID <- user_pmp_new %>% pull("OBJECTID")
+      property_title_SERVER(id = "property_mod3",
+                            data = user_pmp_new,
+                            property_field = user_pmp_property(),
+                            parcel_field = user_pmp_parcel())
+
+      eng_table_SERVER(id = "eng_table_mod1",
+                       oid = OID,
+                       nl_ncc = extracted$user_pmp_nl,
+                       dt_proxy = dt_eng_table_proxy)
+
     }
 
     # Close map-click

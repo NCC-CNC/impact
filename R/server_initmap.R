@@ -25,6 +25,21 @@ server_initmap <- quote ({
                        position = "bottomleft",
                        options = layersControlOptions(collapsed = T)) %>%
 
+      # Get mouse over coordinates
+      htmlwidgets::onRender(
+        "function(el,x){
+                    this.on('mousemove', function(e) {
+                        var lat = e.latlng.lat;
+                        var lng = e.latlng.lng;
+                        var coord = [lat, lng];
+                        Shiny.onInputChange('hover_coordinates', coord)
+                    });
+                    this.on('mouseout', function(e) {
+                        Shiny.onInputChange('hover_coordinates', null)
+                    })
+                }"
+      ) %>%
+
       # Style layer control titles
       htmlwidgets::onRender("
         function() {
@@ -48,9 +63,12 @@ server_initmap <- quote ({
   # Load achievement polygons by region when selected in layer controls.
   # Only load once.
   observeEvent(input$ncc_map_groups, {
+
     # remove base groups
     layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
-      c("Topographic","Imagery","Streets", "convalue", "User PMP"))]
+      c("Topographic","Imagery","Streets", "convalue", "User PMP",
+        "Native Lands", "First Nation Locations", "Tribal Councils",
+        "Inuit Communities", "Reserves"))]
 
     # Check that at least 1 of the overlay groups is toggled on
     if (length(layer_on) > 0) {

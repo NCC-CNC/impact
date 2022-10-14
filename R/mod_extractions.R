@@ -13,14 +13,15 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
   moduleServer(id, function(input, output, session) {
 
     # Return
-    to_return <- reactiveValues(trigger = NULL, flag = NULL, user_pmp_mean = NULL)
+    to_return <- reactiveValues(trigger = NULL, flag = NULL, user_pmp_mean = NULL,
+                                user_pmp_nl = NULL)
 
     # Listen for run extraction button to be clicked
     observeEvent(input$run_extractions, {
 
     #Start progress bar
     withProgress(message = "Running extractions",
-                   value = 0, max = 3, {	incProgress(1)
+                   value = 0, max = 4, {	incProgress(1)
 
      tryCatch({
 
@@ -55,6 +56,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        user_pmp_mean <- user_pmp_mean %>%
          st_make_valid() %>%
          mutate("id" = row_number()) %>%
+         mutate("OBJECTID" = row_number()) %>% # Needed for native land table
          mutate("REGION" = user_pmp_region())
 
        # Calculate area ha
@@ -62,6 +64,16 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
 
        # Project to WGS
        user_pmp_mean <- st_transform(user_pmp_mean, crs = st_crs(4326))
+
+       # Extract Native-Land.ca layers ----
+       incProgress(3)
+       removeNotification(id_)
+       id_ <- showNotification("... intersecting native-lands.ca layers", duration = 0, closeButton=close)
+       user_pmp_id <- user_pmp_mean %>% select(OBJECTID)
+       native_lands_all <- geojsonsf::geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_all.geojson"))
+       sf_use_s2(FALSE)
+       user_pmp_nl <- sf::st_intersection(native_lands_all, user_pmp_id)
+       sf_use_s2(TRUE)
 
        # Update map---------------------------------------------------------------
        user_extent <- st_bbox(user_pmp_mean)
@@ -86,9 +98,10 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        to_return$flag <- 1
        to_return$trigger <- input$run_extractions
        to_return$user_pmp_mean <- user_pmp_mean
+       to_return$user_pmp_nl <- user_pmp_nl
 
        # Finish progress bar
-       incProgress(3)
+       incProgress(4)
        removeNotification(id_)
        showNotification("... Extractions Completed!", duration = 5, closeButton=TRUE, type = 'message')
 

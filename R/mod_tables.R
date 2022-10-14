@@ -92,7 +92,7 @@ eng_table_UI <- function(id) {
 }
 
 # Engagement table SERVER
-eng_table_SERVER <- function(id, gis_id = NULL, nl_ncc = NULL, dt_proxy = NULL) {
+eng_table_SERVER <- function(id, oid = NULL, nl_ncc = NULL, dt_proxy = NULL) {
   moduleServer(id, function(input, output, session) {
 
     # Render empty table ----
@@ -109,7 +109,7 @@ eng_table_SERVER <- function(id, gis_id = NULL, nl_ncc = NULL, dt_proxy = NULL) 
         resetPaging = FALSE,
         rownames = FALSE,
         eng_table(
-          gis_id = gis_id,
+          oid = oid,
           nl_ncc = nl_ncc
         )
       )}
