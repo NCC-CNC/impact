@@ -174,3 +174,32 @@ a {
 .modal-footer{
   display:none
 }
+
+/* engagment*/
+
+.engagement-layers-title,
+.engagement-layers-title {
+  text-align: center;
+}
+
+.engagement-layers-title {
+  margin-top: 25px;
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+
+.indigenous-layers {
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  text-align: center;
+  padding: 10px 0px;
+}
+
+.indigenous-layers-buttons {
+  max-width: 475px;
+  margin: 0 auto;
+
+}
+
+.shiny-options-group .indigenous-layers-buttons {
+  padding: 10px;
+}

@@ -65,4 +65,29 @@ app_global <- quote({
     "Endemics_NSC", "Biodiversity_NSC", "Forest", "Grassland", "Wetland",
     "River", "Lakes", "Shoreline", "Climate_velocity", "Climate_refugia",
     "Carbon_current", "Carbon_potential", "Freshwater", "Recreation")
+
+  # Read-in First Nation layers ------------------------------------------------
+  nl_ncc <- geojsonsf::geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_ncc.geojson"))
+
+  fn_points <- read_sf(file.path("inst", "extdata", "native_lands", "Premiere_Nation_First_Nation.shp")) %>%
+    st_transform(crs = 4326)
+
+  tc_points <- read_sf(file.path("inst", "extdata", "native_lands", "Conseil_Tribal_Tribal_Council.shp")) %>%
+    st_transform(crs = 4326)
+
+  ic_points <- read_sf(file.path("inst", "extdata", "native_lands", "Communaute_Inuite_Inuit_Community.shp")) %>%
+    st_transform(crs = 4326)
+
+  reserves_bc <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_bc.shp"))
+  reserves_ab <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_ab.shp"))
+  reserves_sk <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_sk.shp"))
+  reserves_mb <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_mb.shp"))
+  reserves_on <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_on.shp"))
+  reserves_qc <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_qc.shp"))
+  reserves_at <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_at.shp"))
+  reserves_yk <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_yk.shp"))
+  reserves_nwt <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_nwt.shp"))
+  reserves_nu <- read_sf(file.path("inst", "extdata", "native_lands", "reserves_nu.shp"))
+
+
 })

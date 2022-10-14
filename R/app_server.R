@@ -55,6 +55,9 @@ app_server <- function(input, output, session) {
   ## Listen for map click and render table/plots  ----
   eval(server_mapclick)
 
+  ## Engagement layers  ----
+  eval(server_engagement)
+
   ## Update map with conservation theme: ----
   eval(server_showtheme)
 
