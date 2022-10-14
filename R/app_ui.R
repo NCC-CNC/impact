@@ -66,17 +66,53 @@ app_ui <- function(request) {
         tabPanel("Engagement",
 
           property_title_UI(id = "property_mod3"),
+          br(),
           eng_table_UI(id = "eng_table_mod1"),
-
           br(),
 
+          tags$div(class = "indigenous-layers",
+          tags$div(class = "indigenous-layers-buttons",
           ### Native-lands.ca layers
-          fluidRow(
-            radioButtons("native_lands", label = NULL,
-                         choices = c("Off", "Territories", "Languages", "Treaties"),
-                         inline = TRUE, width = '100%')
-          ))
+          h5(class = "engagement-layers-title", a("Native-Land.ca", href="https://native-land.ca/", target="_blank")),
+          fluidRow(column(12,
+            prettyRadioButtons(inputId = "native_lands",
+                               label = "",
+                               status = "success",
+                               choices = c("Off", "Territories", "Languages", "Treaties"),
+                               inline = TRUE,
+                               fill = TRUE))),
 
+          ### First Nation points
+          h5(class = "engagement-layers-title",
+             a("First Nation Profiles", href="https://fnp-ppn.aadnc-aandc.gc.ca/fnp/Main/Index.aspx?lang=eng",
+               target="_blank")),
+          fluidRow(column(12,
+            prettyCheckboxGroup(
+              inputId = "first_nation",
+              label = "",
+              status = "success",
+              choices = c("First Nation Locations", "Tribal Councils", "Inuit Communities"),
+              inline = TRUE,
+              fill = FALSE
+          ))),
+
+          ### First Nation Reserve layers
+          h5(class = "engagement-layers-title",
+             a("Aboriginal Lands of Canada Legislative Boundaries",
+               href="https://open.canada.ca/data/en/dataset/522b07b9-78e2-4819-b736-ad9208eb1067",
+               target="_blank")),
+          fluidRow(column(12,
+            prettyRadioButtons(inputId = "reserves",
+                               label = "",
+                               status = "success",
+                               choices = c("Off", "BC", "AB", "SK", "MB", "ON",
+                                           "AT", "YK", "NWT", "NU"),
+                               inline = TRUE,
+                               fill = TRUE)))
+          # Close indigenous tab
+          ))
+          # Close engagement tab
+          )
         # Close tabsetPanel
         )
       # Close sidebarPanel
