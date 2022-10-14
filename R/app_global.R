@@ -69,21 +69,21 @@ app_global <- quote({
   # Read-in First Nation layers ------------------------------------------------
   nl_ncc <- geojsonsf::geojson_sf(file.path(data_path, "native_lands", "native_lands_ncc.geojson"))
 
-  fn_points <- read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp"))
+  fn_points <- sf::read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp"))
 
-  tc_points <- read_sf(file.path(data_path, "native_lands", "Conseil_Tribal_Tribal_Council.shp"))
+  tc_points <- sf::read_sf(file.path(data_path, "native_lands", "Conseil_Tribal_Tribal_Council.shp"))
 
-  ic_points <- read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp"))
+  ic_points <- sf::read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp"))
 
-  reserves_bc <- read_sf(file.path(data_path, "native_lands", "reserves_bc.shp"))
-  reserves_ab <- read_sf(file.path(data_path, "native_lands", "reserves_ab.shp"))
-  reserves_sk <- read_sf(file.path(data_path, "native_lands", "reserves_sk.shp"))
-  reserves_mb <- read_sf(file.path(data_path, "native_lands", "reserves_mb.shp"))
-  reserves_on <- read_sf(file.path(data_path, "native_lands", "reserves_on.shp"))
-  reserves_qc <- read_sf(file.path(data_path, "native_lands", "reserves_qc.shp"))
-  reserves_at <- read_sf(file.path(data_path, "native_lands", "reserves_at.shp"))
-  reserves_yk <- read_sf(file.path(data_path, "native_lands", "reserves_yk.shp"))
-  reserves_nwt <- read_sf(file.path(data_path, "native_lands", "reserves_nwt.shp"))
-  reserves_nu <- read_sf(file.path(data_path, "native_lands", "reserves_nu.shp"))
+  reserves_bc <- sf::read_sf(file.path(data_path, "native_lands", "reserves_bc.shp"))
+  reserves_ab <- sf::read_sf(file.path(data_path, "native_lands", "reserves_ab.shp"))
+  reserves_sk <- sf::read_sf(file.path(data_path, "native_lands", "reserves_sk.shp"))
+  reserves_mb <- sf::read_sf(file.path(data_path, "native_lands", "reserves_mb.shp"))
+  reserves_on <- sf::read_sf(file.path(data_path, "native_lands", "reserves_on.shp"))
+  reserves_qc <- sf::read_sf(file.path(data_path, "native_lands", "reserves_qc.shp"))
+  reserves_at <- sf::read_sf(file.path(data_path, "native_lands", "reserves_at.shp"))
+  reserves_yk <- sf::read_sf(file.path(data_path, "native_lands", "reserves_yk.shp"))
+  reserves_nwt <- sf::read_sf(file.path(data_path, "native_lands", "reserves_nwt.shp"))
+  reserves_nu <- sf::read_sf(file.path(data_path, "native_lands", "reserves_nu.shp"))
 
 })
