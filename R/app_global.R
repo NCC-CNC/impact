@@ -69,14 +69,11 @@ app_global <- quote({
   # Read-in First Nation layers ------------------------------------------------
   nl_ncc <- geojsonsf::geojson_sf(file.path(data_path, "native_lands", "native_lands_ncc.geojson"))
 
-  fn_points <- read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp")) %>%
-    st_transform(crs = 4326)
+  fn_points <- read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp"))
 
-  tc_points <- read_sf(file.path(data_path, "native_lands", "Conseil_Tribal_Tribal_Council.shp")) %>%
-    st_transform(crs = 4326)
+  tc_points <- read_sf(file.path(data_path, "native_lands", "Conseil_Tribal_Tribal_Council.shp"))
 
-  ic_points <- read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp")) %>%
-    st_transform(crs = 4326)
+  ic_points <- read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp"))
 
   reserves_bc <- read_sf(file.path(data_path, "native_lands", "reserves_bc.shp"))
   reserves_ab <- read_sf(file.path(data_path, "native_lands", "reserves_ab.shp"))
