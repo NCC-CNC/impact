@@ -67,6 +67,7 @@ app_global <- quote({
     "Carbon_current", "Carbon_potential", "Freshwater", "Recreation")
 
   # Read-in First Nation layers ------------------------------------------------
+
   nl_ncc <- geojsonsf::geojson_sf(file.path(data_path, "native_lands", "native_lands_ncc.geojson"))
 
   fn_points <- sf::read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp"))
@@ -75,15 +76,40 @@ app_global <- quote({
 
   ic_points <- sf::read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp"))
 
-  reserves_bc <- sf::read_sf(file.path(data_path, "native_lands", "reserves_bc.shp"))
-  reserves_ab <- sf::read_sf(file.path(data_path, "native_lands", "reserves_ab.shp"))
-  reserves_sk <- sf::read_sf(file.path(data_path, "native_lands", "reserves_sk.shp"))
-  reserves_mb <- sf::read_sf(file.path(data_path, "native_lands", "reserves_mb.shp"))
-  reserves_on <- sf::read_sf(file.path(data_path, "native_lands", "reserves_on.shp"))
-  reserves_qc <- sf::read_sf(file.path(data_path, "native_lands", "reserves_qc.shp"))
-  reserves_at <- sf::read_sf(file.path(data_path, "native_lands", "reserves_at.shp"))
-  reserves_yk <- sf::read_sf(file.path(data_path, "native_lands", "reserves_yk.shp"))
-  reserves_nwt <- sf::read_sf(file.path(data_path, "native_lands", "reserves_nwt.shp"))
-  reserves_nu <- sf::read_sf(file.path(data_path, "native_lands", "reserves_nu.shp"))
+  # Data structure fore First Nation reserves
+
+  reserve_groups <<- list(
+    "BC" = list("group" = "BC Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_bc.shp"),
+                "sf" = NULL),
+    "AB" = list("group" = "AB Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_ab.shp"),
+                "sf" = NULL),
+    "SK" = list("group" = "SK Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_sk.shp"),
+                "sf" = NULL),
+    "MB" = list("group" = "MB Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_mb.shp"),
+                "sf" = NULL),
+    "ON" = list("group" = "ON Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_on.shp"),
+                "sf" = NULL),
+    "QC" = list("group" = "QC Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_qc.shp"),
+                "sf" = NULL),
+    "AT" = list("group" = "AT Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_at.shp"),
+                "sf" = NULL),
+    "YK" = list("group" = "YK Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_YK.shp"),
+                "sf" = NULL),
+    "NWT" = list("group" = "NWT Reserves",
+                 "path" = file.path(data_path, "native_lands", "reserves_NWT.shp"),
+                 "sf" = NULL),
+    "NU" = list("group" = "NU Reserves",
+                "path" = file.path(data_path, "native_lands", "reserves_NU.shp"),
+                "sf" = NULL))
+
+  reserve_names <<- unname(unlist(purrr::map_depth(reserve_groups, 1, "group")))
 
 })
