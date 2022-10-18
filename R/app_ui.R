@@ -106,7 +106,7 @@ app_ui <- function(request) {
                                label = "",
                                status = "success",
                                choices = c("Off", "BC", "AB", "SK", "MB", "ON",
-                                           "AT", "YK", "NWT", "NU"),
+                                          "QC", "AT", "YK", "NWT", "NU"),
                                inline = TRUE,
                                fill = TRUE)))
           # Close indigenous tab
