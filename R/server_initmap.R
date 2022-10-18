@@ -48,6 +48,50 @@ server_initmap <- quote ({
         }
     ") %>%
 
+      # Leaflet spinner for addPolgygon ...
+      # https://davidruvolo51.github.io/shinytutorials/tutorials/leaflet-loading-screens/
+      htmlwidgets::onRender(., "
+                function(el, x, data) {
+                    // select map, loader, button
+                    var m = this;
+                    const elem = document.getElementById('leafletBusy');
+                    const reserves = document.querySelectorAll('#reserves input');
+                    // when map is rendered, display loading
+                    // adjust delay as needed
+                    m.whenReady(function() {
+                        elem.classList.remove('visually-hidden');
+                        setTimeout(function() {
+                            elem.classList.add('visually-hidden');
+                        }, 0)
+                    });
+                    // click event on radio button node list
+                    for (var i = 0; i < reserves.length; i++) {
+                    reserves[i].addEventListener('change', function(event) {
+                        // show loading element
+                        elem.classList.remove('visually-hidden');
+                        (new Promise(function(resolve, reject) {
+                            // leaflet event: layeradd
+                            m.addEventListener('layeradd', function(event) {
+                                console.log(event.type)
+                                // resolve after a few seconds to ensure all
+                                // elements rendered (adjust as needed)
+                                // time is in milliseconds
+                                setTimeout(function() {
+                                    resolve('done');
+                                }, 0)
+                            })
+                        })).then(function(response) {
+                            // resolve: hide loading screen
+                            console.log('done');
+                            elem.classList.add('visually-hidden');
+                        }).catch(function(error) {
+                            // throw errors
+                            console.error(error);
+                        });
+                    });
+                    };
+                }") %>%
+
       # Turn off all group layers
       hideGroup("British Columbia") %>%
       hideGroup("Alberta") %>%
@@ -68,7 +112,9 @@ server_initmap <- quote ({
     layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
       c("Topographic","Imagery","Streets", "convalue", "User PMP",
         "Native Lands", "First Nation Locations", "Tribal Councils",
-        "Inuit Communities", "Reserves"))]
+        "Inuit Communities", "BC Reserves", "AB Reserves", "SK Reserves",
+        "MB Reserves", "ON Reserves", "QC Reserves", "AT Reserves",
+        "YK Reserves", "NWT Reserves", "NU Reserves"))]
 
     # Check that at least 1 of the overlay groups is toggled on
     if (length(layer_on) > 0) {

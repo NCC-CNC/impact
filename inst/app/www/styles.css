@@ -203,3 +203,53 @@ a {
 .shiny-options-group .indigenous-layers-buttons {
   padding: 10px;
 }
+
+/* leaflet loader */
+/* class to visually hide loading screens */
+.visually-hidden {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* styling for loading container */
+.loading-container {
+    position: relative;
+}
+
+/* loading ui  */
+.loading-container .loading-ui {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    text-align: center;
+    z-index: 9999;
+}
+
+/* spinner  */
+.spinner {
+  display: block;
+  margin: auto;
+  height: 10em;
+  top: 50%; right: 50%;
+  transform: translate(50%,-50%);
+  width: 10em;
+  border: 6px solid rgba(0, 96, 46, 0.2);
+  border-top-color: rgba(0, 96, 46, 0.8);
+  border-radius: 50%;
+  animation: rotation 0.6s infinite linear;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

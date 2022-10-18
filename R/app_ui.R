@@ -9,7 +9,7 @@ app_ui <- function(request) {
   # Leave this function for adding external resources
   golem_add_external_resources(),
   # Your application UI logic
-
+  tags$div(style="display: none;", "This will be hidden"),
   navbarPage(
   "NCC Conservation Technology",
   tabPanel(class="pmp_tool", "Project Evaluation - DEV",
@@ -122,7 +122,7 @@ app_ui <- function(request) {
       mainPanel(class = "main",
 
       ## NCC map ----
-      withSpinner(color = "#33862B", size = 2, proxy.height = "100vh",
+      loading_message(id = "leafletBusy",
       leafletOutput(outputId = "ncc_map",
                     height = "calc(100vh - 100px)", width = "100%")),
 
