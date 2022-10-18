@@ -1,13 +1,12 @@
 server_engagement <- quote ({
 
-
+  # Listen for native lands selection ----
   observeEvent(input$native_lands, {
 
     req(input$native_lands)
 
     # Native lands layer
     native_land_geojson <- reactive({
-      print(input$native_lands)
       switch(as.character(input$native_lands),
         "Off" = "off",
          "Territories" = file.path(data_path, "native_lands", "native_lands_territories.geojson"),
@@ -15,6 +14,7 @@ server_engagement <- quote ({
          "Treaties" = file.path(data_path, "native_lands", "native_lands_treaties.geojson"))
       })
 
+    # Add native land layer to map
     if (input$native_lands != "Off") {
 
       native_land_layer <- geojsonsf::geojson_sf(native_land_geojson())
@@ -34,7 +34,7 @@ server_engagement <- quote ({
                       highlightOptions(weight = 10, color = native_land_layer$color)
                     )
     } else {
-
+      # Clear native land layers when off
       leafletProxy("ncc_map") %>%
         clearGroup(group = "Native Lands")
 
@@ -42,48 +42,58 @@ server_engagement <- quote ({
 
   })
 
-
+  # Listen for First Nation reserve selection ----
   observeEvent(input$reserves, {
 
     req(input$reserves)
 
-    # Native lands layer
-    reserves_sf <- reactive({
-      switch(as.character(input$reserves),
-             "Off" = "off",
-             "BC" = reserves_bc,
-             "AB" = reserves_ab,
-             "SK" = reserves_sk,
-             "MB" = reserves_mb,
-             "ON" = reserves_on,
-             "QC" = reserves_qc,
-             "AT" = reserves_at,
-             "YK" = reserves_yk,
-             "NWT" = reserves_nwt,
-             "NU" = reserves_nu)
-    })
-
+    # Add First Nation reserves to map
     if (input$reserves != "Off") {
 
-      leafletProxy("ncc_map") %>%
-        clearGroup(group = "Reserves") %>%
-        addPolygons(data = reserves_sf(),
-                    fillColor = "#ffff33",
-                    color = "black",
-                    weight = 1,
-                    fillOpacity = 0.5,
-                    group = "Reserves",
-                    label = ~NAME1,
-                    highlightOptions =
-                      highlightOptions(weight = 5, color = "#ffff33")
-        )
+      # Follows data structure built in app_global.R
+      if (is.null(reserve_groups[[input$reserves]]$sf)) {
+
+        # Read-in reserve polygon
+        reserve_groups[[input$reserves]]$sf <<- sf::read_sf(reserve_groups[[input$reserves]]$path)
+
+        # Map reserve (only addPolygons once for province)
+        leafletProxy("ncc_map") %>%
+          hideGroup(reserve_names) %>%
+          addPolygons(data = reserve_groups[[input$reserves]]$sf,
+                      group = reserve_groups[[input$reserves]]$group,
+                      fillColor = "#ffff33",
+                      color = "black",
+                      weight = 1,
+                      fillOpacity = 0.5,
+                      label = ~NAME1,
+                      highlightOptions =
+                        highlightOptions(weight = 5, color = "#ffff33")) %>%
+          showGroup(reserve_groups[[input$reserves]]$group)
+
     } else {
+
+      # Clear all reserves and then show the reserve that is cached
       leafletProxy("ncc_map") %>%
-        clearGroup(group = "Reserves")
+        hideGroup(reserve_names) %>%
+        showGroup(reserve_groups[[input$reserves]]$group)
     }
+  } else {
+
+    # Clear all reserves
+    leafletProxy("ncc_map") %>%
+      hideGroup(reserve_names) %>%
+    # Add ghost point to turn off css spinner
+      addCircleMarkers(lng = -96.8165,
+                       lat = 49.7713,
+                       radius = 0,
+                       fillOpacity = 0,
+                       stroke = FALSE,
+                       weight = 0)
+    }
+  # Clost First Nation reserve observeEvent
   })
 
-
+  # Listen for First Nation points selection ----
   observeEvent(input$first_nation, {
 
     # Clear First Nation point
@@ -94,7 +104,7 @@ server_engagement <- quote ({
         clearGroup("Inuit Communities") %>%
         clearGroup("First Nation Reserves")
     } else {
-      fn_groups <- c("First Nation Locations", "Tribal Councils", "Inuit Communities", "First Nation Reserves")
+      fn_groups <- c("First Nation Locations", "Tribal Councils", "Inuit Communities")
       fn_clear <- fn_groups[!(fn_groups %in% input$first_nation)]
       for (clear in fn_clear) {
         leafletProxy("ncc_map") %>%
@@ -102,7 +112,7 @@ server_engagement <- quote ({
       }
     }
 
-    # Add First Nation points
+    # Add First Nation points ----
     for (fn in input$first_nation) {
 
       if (fn == "First Nation Locations") {
@@ -140,38 +150,10 @@ server_engagement <- quote ({
                            weight = 1,
                            fillColor = "#984ea3",
                            options = pathOptions(pane = "ic"))
-
-      } else if (fn == "First Nation Reserves") {
-        leafletProxy("ncc_map", data = aloc_points) %>%
-          addMapPane("r_poly", zIndex = 698) %>%
-          addMapPane("r_points", zIndex = 701) %>%
-          addTiles(urlTemplate = ("tiles/reserves/{z}/{x}/{y}.png"),
-                   options = pathOptions(pane = "r_poly"),
-                   group = "First Nation Reserves") %>%
-
-          # addCircleMarkers(label = ~NAME1,
-          #                  group = "First Nation Reserves",
-          #                  radius = 2,
-          #                  color = "Black",
-          #                  fillOpacity = 1,
-          #                  weight = 0.2,
-          #                  fillColor = "#ffff33",
-          #                  clusterOptions = markerClusterOptions(),
-          #                  options = pathOptions(pane = "r_points"))
-
-
-#        leafletProxy("ncc_map") %>%
-          addPolygons(data = aloc_poly,
-                      fillColor = "#ffff33",
-                      color = "black",
-                      weight = 0,
-                      fillOpacity = 0,
-                      group = "First Nation Reserves",
-                      label = ~NAME1)
         }
-      # Close for-loop
+      # Close First Nation points for loop
       }
     # Close First Nation points observeEvent
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE) # get status of buttons when app inits
 # Close quote
 })
