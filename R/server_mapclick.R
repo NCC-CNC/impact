@@ -18,9 +18,8 @@ server_mapclick <- quote ({
     req(map_click()$id)
 
     # Logic for baseinput PMPs ----
-    if(map_click()$group %in% c("British Columbia", "Alberta","Saskatchewan",
-                                "Manitoba", "Ontario", "Quebec", "Atlantic",
-                                "Yukon")) {
+    if(map_click()$group %in% c("BC", "AB","SK", "MB",
+                                "ON", "QC", "AT", "YK")) {
 
       ## Subset achievement sf by id ----
       user_pmp <- PMP_tmp %>% dplyr::filter(id == as.numeric(map_click()$id))

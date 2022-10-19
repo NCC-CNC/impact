@@ -18,10 +18,7 @@ server_initmap <- quote ({
 
       addMapPane("pmp_pane", zIndex = 600) %>% # Always top layer
 
-      addLayersControl(overlayGroups = c('British Columbia', "Alberta",
-                        "Saskatchewan","Manitoba", "Ontario", "Quebec",
-                        "Atlantic","Yukon"),
-                       baseGroups = c("Topographic", "Imagery", "Streets"),
+      addLayersControl(baseGroups = c("Topographic", "Imagery", "Streets"),
                        position = "bottomleft",
                        options = layersControlOptions(collapsed = T)) %>%
 
@@ -43,7 +40,6 @@ server_initmap <- quote ({
       # Style layer control titles
       htmlwidgets::onRender("
         function() {
-          $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:center\">Achievments</label>');
           $('.leaflet-control-layers-list').prepend('<label style=\"text-align:center\">Basemaps</label>');
         }
     ") %>%
@@ -56,6 +52,7 @@ server_initmap <- quote ({
                     var m = this;
                     const elem = document.getElementById('leafletBusy');
                     const reserves = document.querySelectorAll('#reserves input');
+                    const ncc_parcels = document.querySelectorAll('#ncc_regions input');
                     // when map is rendered, display loading
                     // adjust delay as needed
                     m.whenReady(function() {
@@ -90,62 +87,137 @@ server_initmap <- quote ({
                         });
                     });
                     };
-                }") %>%
 
-      # Turn off all group layers
-      hideGroup("British Columbia") %>%
-      hideGroup("Alberta") %>%
-      hideGroup("Saskatchewan") %>%
-      hideGroup("Manitoba") %>%
-      hideGroup("Ontario") %>%
-      hideGroup("Quebec") %>%
-      hideGroup("Atlantic") %>%
-      hideGroup("Yukon")
+                    // click event on ncc parcel button node list
+                    for (var i = 0; i < ncc_parcels.length; i++) {
+                    ncc_parcels[i].addEventListener('change', function(event) {
+                        // show loading element
+                        elem.classList.remove('visually-hidden');
+                        (new Promise(function(resolve, reject) {
+                            // leaflet event: layeradd
+                            m.addEventListener('layeradd', function(event) {
+                                console.log(event.type)
+                                // resolve after a few seconds to ensure all
+                                // elements rendered (adjust as needed)
+                                // time is in milliseconds
+                                setTimeout(function() {
+                                    resolve('done');
+                                }, 0)
+                            })
+                        })).then(function(response) {
+                            // resolve: hide loading screen
+                            console.log('done');
+                            elem.classList.add('visually-hidden');
+                        }).catch(function(error) {
+                            // throw errors
+                            console.error(error);
+                        });
+                    });
+
+                    };
+                }")
 
   })
 
-  # Load achievement polygons by region when selected in layer controls.
-  # Only load once.
-  observeEvent(input$ncc_map_groups, {
+  observeEvent(input$ncc_regions, {
 
-    # remove base groups
-    layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
-      c("Topographic","Imagery","Streets", "convalue", "User PMP",
-        "Native Lands", "First Nation Locations", "Tribal Councils",
-        "Inuit Communities", "BC Reserves", "AB Reserves", "SK Reserves",
-        "MB Reserves", "ON Reserves", "QC Reserves", "AT Reserves",
-        "YK Reserves", "NWT Reserves", "NU Reserves"))]
+    # Hide NCC parcels if nothing is checked
+    if (length(input$ncc_regions) == 0) {
+      leafletProxy("ncc_map") %>%
+        hideGroup(c("AB", "BC", "SK", "MB", "ON", "QC", "AT", "YK")) %>%
+        # Add ghost point to turn off css spinner
+        addCircleMarkers(lng = -96.8165,
+                         lat = 49.7713,
+                         radius = 0,
+                         fillOpacity = 0,
+                         stroke = FALSE,
+                         weight = 0)
 
-    # Check that at least 1 of the overlay groups is toggled on
-    if (length(layer_on) > 0) {
+    } else {
 
-      # update cached list by adding
-      for(i in layer_on) {
-        cached[[i]] <<-  cached[[i]] + 1
-      }
+      # Map NCC parcel
+      for (parcel in input$ncc_regions) {
 
-      # add polygon
-      for(name in  names(cached)){
-
-        if (cached[[name]] == 1) {
-          data <- achievements[name][[1]]
+        if (is.null(ncc_parcels[[parcel]]$sf)) {
+          ncc_parcels[[parcel]]$sf <<- dplyr::filter(PMP_tmp, REGION == ncc_parcels[[parcel]]$region)
           leafletProxy("ncc_map") %>%
-            addPolygons(data = data,
-                        group = name,
+            addPolygons(data = ncc_parcels[[parcel]]$sf,
+                        group = ncc_parcels[[parcel]]$group,
                         layerId = ~id, # click event id selector
                         label = ~htmlEscape(NAME),
-                        popup = PMP_popup(data), # fct_popup.R
+                        popup = PMP_popup(ncc_parcels[[parcel]]$sf), # fct_popup.R
                         fillColor = "#33862B",
                         color = "black",
                         weight = 1,
                         fillOpacity = 0.7,
                         options = pathOptions(pane = "pmp_pane"),
                         highlightOptions =
-                          highlightOptions(weight = 3, color = '#00ffd9'))
-          }
+                          highlightOptions(weight = 3, color = '#00ffd9')) %>%
+            showGroup(ncc_parcels[[parcel]]$group)
+
+        } else {
+         # Clear cached groups
+          ncc_groups <- c("BC", "AB", "SK", "MB", "ON", "QC", "AT", "YK")
+          ncc_clear <- ncc_groups[!(ncc_groups %in% input$ncc_regions)]
+          ncc_show <- ncc_groups[(ncc_groups %in% input$ncc_regions)]
+          leafletProxy("ncc_map") %>%
+            hideGroup(ncc_clear) %>%
+            showGroup(ncc_show) %>%
+            # Add ghost point to turn off css spinner
+            addCircleMarkers(lng = -96.8165,
+                             lat = 49.7713,
+                             radius = 0,
+                             fillOpacity = 0,
+                             stroke = FALSE,
+                             weight = 0)
         }
-     }
-    })
+      }
+    }
+  }, ignoreNULL = FALSE)
+
+
+  # # Load achievement polygons by region when selected in layer controls.
+  # # Only load once.
+  # observeEvent(input$ncc_map_groups, {
+  #
+  #   # remove base groups
+  #   layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
+  #     c("Topographic","Imagery","Streets", "convalue", "User PMP",
+  #       "Native Lands", "First Nation Locations", "Tribal Councils",
+  #       "Inuit Communities", "BC Reserves", "AB Reserves", "SK Reserves",
+  #       "MB Reserves", "ON Reserves", "QC Reserves", "AT Reserves",
+  #       "YK Reserves", "NWT Reserves", "NU Reserves"))]
+  #
+  #   # Check that at least 1 of the overlay groups is toggled on
+  #   if (length(layer_on) > 0) {
+  #
+  #     # update cached list by adding
+  #     for(i in layer_on) {
+  #       cached[[i]] <<-  cached[[i]] + 1
+  #     }
+  #
+  #     # add polygon
+  #     for(name in  names(cached)){
+  #
+  #       if (cached[[name]] == 1) {
+  #         data <- achievements[name][[1]]
+  #         leafletProxy("ncc_map") %>%
+  #           addPolygons(data = data,
+  #                       group = name,
+  #                       layerId = ~id, # click event id selector
+  #                       label = ~htmlEscape(NAME),
+  #                       popup = PMP_popup(data), # fct_popup.R
+  #                       fillColor = "#33862B",
+  #                       color = "black",
+  #                       weight = 1,
+  #                       fillOpacity = 0.7,
+  #                       options = pathOptions(pane = "pmp_pane"),
+  #                       highlightOptions =
+  #                         highlightOptions(weight = 3, color = '#00ffd9'))
+  #         }
+  #       }
+  #    }
+  #   })
 
   ## Display updated user PMP ----
   observeEvent(user_pmp_upload_path(), {
