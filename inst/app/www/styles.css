@@ -17,6 +17,11 @@ code {
     background-color: #2D602E !important;
 }
 
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  color: #FFFFFF;
+  background-color: #2D602E;
+}
+
 /* side panel */
 .side {
   height: calc(100vh - 100px);
@@ -190,12 +195,15 @@ a {
 .container-layers-buttons {
   max-width: 475px;
   margin: 0 auto;
-
 }
 
 
-.shiny-options-group .container-layers-buttons {
-  padding: 10px;
+.shiny-options-group {
+  line-height: 2;
+}
+
+.layers-title {
+  margin-bottom: 0px;
 }
 
 /* leaflet loader */
@@ -246,4 +254,65 @@ a {
   100% {
     transform: rotate(359deg);
   }
+}
+
+/* tile legend */
+.continuous-legend {
+    display: none;
+    padding: 10px;
+    width: calc(100% - 50px);
+    margin: 0 auto;
+}
+
+.continuous-legend p {
+ font-weight: 400;
+}
+
+.continuous-legend-flex {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+}
+
+.units {
+    display: flex;
+}
+
+.continuous-legend .color-bar {
+    min-height: 22px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.color-bar {
+    background-color: rgb(253, 231, 37);
+    background-image: linear-gradient( to left,rgb(253, 231, 37) 0%, rgb(93, 200, 99) 20%, rgb(33, 144, 140) 40%, rgb(59, 82, 139) 60%, rgb(68, 1, 84) 80%);
+
+}
+
+.continuous-legend .items {
+    display: flex;
+    justify-content: space-between;
+}
+
+.continuous-legend .item {
+    display: flex;
+    flex-direction: column;
+}
+
+.continuous-legend .items {
+    display: flex;
+    justify-content: space-between;
+}
+
+.continuous-legend .items .tick {
+    height: 5px;
+    width: 1px;
+    display: inline-block;
+    background-color: black;
+}
+
+.colorbar-label {
+    padding-top: 2px;
+    margin-left: -7px;
 }
