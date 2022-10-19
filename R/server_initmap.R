@@ -44,81 +44,13 @@ server_initmap <- quote ({
         }
     ") %>%
 
-      # Leaflet spinner for addPolgygon ...
+      # Leaflet spinner for addPolygon
       # https://davidruvolo51.github.io/shinytutorials/tutorials/leaflet-loading-screens/
-      htmlwidgets::onRender(., "
-                function(el, x, data) {
-                    // select map, loader, button
-                    var m = this;
-                    const elem = document.getElementById('leafletBusy');
-                    const reserves = document.querySelectorAll('#reserves input');
-                    const ncc_parcels = document.querySelectorAll('#ncc_regions input');
-                    // when map is rendered, display loading
-                    // adjust delay as needed
-                    m.whenReady(function() {
-                        elem.classList.remove('visually-hidden');
-                        setTimeout(function() {
-                            elem.classList.add('visually-hidden');
-                        }, 0)
-                    });
-                    // click event on radio button node list
-                    for (var i = 0; i < reserves.length; i++) {
-                    reserves[i].addEventListener('change', function(event) {
-                        // show loading element
-                        elem.classList.remove('visually-hidden');
-                        (new Promise(function(resolve, reject) {
-                            // leaflet event: layeradd
-                            m.addEventListener('layeradd', function(event) {
-                                console.log(event.type)
-                                // resolve after a few seconds to ensure all
-                                // elements rendered (adjust as needed)
-                                // time is in milliseconds
-                                setTimeout(function() {
-                                    resolve('done');
-                                }, 0)
-                            })
-                        })).then(function(response) {
-                            // resolve: hide loading screen
-                            console.log('done');
-                            elem.classList.add('visually-hidden');
-                        }).catch(function(error) {
-                            // throw errors
-                            console.error(error);
-                        });
-                    });
-                    };
-
-                    // click event on ncc parcel button node list
-                    for (var i = 0; i < ncc_parcels.length; i++) {
-                    ncc_parcels[i].addEventListener('change', function(event) {
-                        // show loading element
-                        elem.classList.remove('visually-hidden');
-                        (new Promise(function(resolve, reject) {
-                            // leaflet event: layeradd
-                            m.addEventListener('layeradd', function(event) {
-                                console.log(event.type)
-                                // resolve after a few seconds to ensure all
-                                // elements rendered (adjust as needed)
-                                // time is in milliseconds
-                                setTimeout(function() {
-                                    resolve('done');
-                                }, 0)
-                            })
-                        })).then(function(response) {
-                            // resolve: hide loading screen
-                            console.log('done');
-                            elem.classList.add('visually-hidden');
-                        }).catch(function(error) {
-                            // throw errors
-                            console.error(error);
-                        });
-                    });
-
-                    };
-                }")
+      htmlwidgets::onRender(., addPolygon_spinner_ugly_js)
 
   })
 
+  # Listen for NCC regions (accomplishment / parcel) selection
   observeEvent(input$ncc_regions, {
 
     # Hide NCC parcels if nothing is checked
@@ -137,7 +69,7 @@ server_initmap <- quote ({
 
       # Map NCC parcel
       for (parcel in input$ncc_regions) {
-
+        # Subset and display parcel for first time selection
         if (is.null(ncc_parcels[[parcel]]$sf)) {
           ncc_parcels[[parcel]]$sf <<- dplyr::filter(PMP_tmp, REGION == ncc_parcels[[parcel]]$region)
           leafletProxy("ncc_map") %>%
@@ -156,7 +88,7 @@ server_initmap <- quote ({
             showGroup(ncc_parcels[[parcel]]$group)
 
         } else {
-         # Clear cached groups
+         # Clear then show cached groups
           ncc_groups <- c("BC", "AB", "SK", "MB", "ON", "QC", "AT", "YK")
           ncc_clear <- ncc_groups[!(ncc_groups %in% input$ncc_regions)]
           ncc_show <- ncc_groups[(ncc_groups %in% input$ncc_regions)]
@@ -175,49 +107,6 @@ server_initmap <- quote ({
     }
   }, ignoreNULL = FALSE)
 
-
-  # # Load achievement polygons by region when selected in layer controls.
-  # # Only load once.
-  # observeEvent(input$ncc_map_groups, {
-  #
-  #   # remove base groups
-  #   layer_on <- input$ncc_map_groups[!(input$ncc_map_groups %in%
-  #     c("Topographic","Imagery","Streets", "convalue", "User PMP",
-  #       "Native Lands", "First Nation Locations", "Tribal Councils",
-  #       "Inuit Communities", "BC Reserves", "AB Reserves", "SK Reserves",
-  #       "MB Reserves", "ON Reserves", "QC Reserves", "AT Reserves",
-  #       "YK Reserves", "NWT Reserves", "NU Reserves"))]
-  #
-  #   # Check that at least 1 of the overlay groups is toggled on
-  #   if (length(layer_on) > 0) {
-  #
-  #     # update cached list by adding
-  #     for(i in layer_on) {
-  #       cached[[i]] <<-  cached[[i]] + 1
-  #     }
-  #
-  #     # add polygon
-  #     for(name in  names(cached)){
-  #
-  #       if (cached[[name]] == 1) {
-  #         data <- achievements[name][[1]]
-  #         leafletProxy("ncc_map") %>%
-  #           addPolygons(data = data,
-  #                       group = name,
-  #                       layerId = ~id, # click event id selector
-  #                       label = ~htmlEscape(NAME),
-  #                       popup = PMP_popup(data), # fct_popup.R
-  #                       fillColor = "#33862B",
-  #                       color = "black",
-  #                       weight = 1,
-  #                       fillOpacity = 0.7,
-  #                       options = pathOptions(pane = "pmp_pane"),
-  #                       highlightOptions =
-  #                         highlightOptions(weight = 3, color = '#00ffd9'))
-  #         }
-  #       }
-  #    }
-  #   })
 
   ## Display updated user PMP ----
   observeEvent(user_pmp_upload_path(), {
