@@ -90,7 +90,7 @@ server_engagement <- quote ({
                        stroke = FALSE,
                        weight = 0)
     }
-  # Clost First Nation reserve observeEvent
+  # Close First Nation reserve observeEvent
   })
 
   # Listen for First Nation points selection ----

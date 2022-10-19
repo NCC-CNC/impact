@@ -25,15 +25,6 @@ code {
   border: none;
 }
 
-.logo {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  width: 50%;
-}
-
 /* map side panel */
 #map_sidebar {
   margin-right: 10px;
@@ -188,19 +179,22 @@ a {
   font-weight: 600;
 }
 
-.indigenous-layers {
+
+/* side bar layer control styles */
+.container-layers {
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   text-align: center;
   padding: 10px 0px;
 }
 
-.indigenous-layers-buttons {
+.container-layers-buttons {
   max-width: 475px;
   margin: 0 auto;
 
 }
 
-.shiny-options-group .indigenous-layers-buttons {
+
+.shiny-options-group .container-layers-buttons {
   padding: 10px;
 }
 
