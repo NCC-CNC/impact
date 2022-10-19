@@ -37,7 +37,47 @@ app_ui <- function(request) {
                                 choices = c("BC", "AB", "SK", "MB",
                                             "ON", "QC", "AT", "YK"),
                                 inline = TRUE,
-                                fill = FALSE)))))),
+                                fill = FALSE))))),
+
+          # Conservation features
+          br(),
+          tags$div(class = "container-layers",
+          tags$div(class = "container-layers-buttons",
+          ### NCC parcel layer with national themes extracted
+          h5(class = "layers-title", "Conservation Features"),
+          fluidRow(column(12,
+            prettyRadioButtons(inputId = "features",
+                                label = "",
+                                status = "success",
+                               choices = c("Off" = "off",
+                                           "Forest" = "forest",
+                                           "Grassland" = "grassland",
+                                           "Wetland" = "wetland",
+                                           "Lakes" = "Lakes"),
+                                inline = TRUE,
+                                fill = FALSE)))),
+
+          # Continuous Legend
+          tags$div(id = "continuous-legend-id", class = "continuous-legend",
+            tags$div(class = "continuous-legend-flex",
+              tags$div(class = "color-bar"),
+              tags$div(class = "units", HTML("&nbsp"), p("%"))
+            ),
+            tags$div(class = "items",
+              tags$div(class = "item",
+                tags$div(class = "tick"),
+                tags$label(class = "colorbar-label", p("0"))
+              ),
+              tags$div(class = "item",
+                       tags$div(class = "tick"),
+                       tags$label(class = "colorbar-label", p("50"))
+              ),
+              tags$div(class = "item",
+                       tags$div(class = "tick"),
+                       tags$label(class = "colorbar-label", p("100"))
+              )
+            ))
+      )),
 
         ## Table ----
         tabPanel("Table",
@@ -188,15 +228,6 @@ app_ui <- function(request) {
 
           # Close map-upload sidebar
           ),
-
-    # Conservation themes ------------------------------------------------------
-    tags$div( class = "raster-controls",
-    h4(class = "raster-title", "Impact Features"),
-    selectInput(
-    inputId = "theme_selection", "", width = "100%",
-    choices = c("No Selection" = F, "Forest(%)" = "forest",
-                "Grassland(%)" = "grassland","Wetland(%)" = "wetland",
-                "River(km)" = "rivers", "Lakes(%)" = "Lakes"))),
 
     # Comparison modal ---------------------------------------------------------
     comparison_UI(id = "compare_mod1")
