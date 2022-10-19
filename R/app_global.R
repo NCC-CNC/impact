@@ -27,29 +27,36 @@ app_global <- quote({
   # Read-in basedata -----------------------------------------------------------
   load(file.path(data_path, "basedata.RData"))
 
-  # Subset achievements by region
-  bc <- dplyr::filter(PMP_tmp, REGION == "British Columbia")
-  ab <- dplyr::filter(PMP_tmp, REGION == "Alberta")
-  sk <- dplyr::filter(PMP_tmp, REGION == "Saskatchewan")
-  mb <- dplyr::filter(PMP_tmp, REGION == "Manitoba")
-  on <- dplyr::filter(PMP_tmp, REGION == "Ontario")
-  qc <- dplyr::filter(PMP_tmp, REGION == "Quebec")
-  at <- dplyr::filter(PMP_tmp, REGION == "Atlantic")
-  yk <- dplyr::filter(PMP_tmp, REGION == "Yukon")
-
-  # create named list of achievements
-  achievements <- list("British Columbia" = bc, "Alberta" = ab,
-    "Saskatchewan" = sk, "Manitoba" = mb, "Ontario" = on, "Quebec" = qc,
-    "Atlantic" = at, "Yukon" = yk)
-
-  # Create a manual cache list that flags if data has been loaded
-  cached <- list("British Columbia" = 0, "Alberta" = 0,
-    "Saskatchewan" = 0, "Manitoba" = 0, "Ontario" = 0, "Quebec" = 0,
-     "Atlantic" = 0, "Yukon" = 0)
-
   # Read-in regional goals -------------------------------------------------------
   goals_csv <- readr::read_csv(file.path(data_path, "goals.csv"),
     locale = readr::locale(encoding = "latin1"))
+
+  # Data structure for NCC accomplishments with extracted national metrics
+  ncc_parcels <<- list(
+    "BC" = list("group" = "BC",
+                "region" = "British Columbia",
+                "sf" = NULL),
+    "AB" = list("group" = "AB",
+                "region" = "Alberta",
+                "sf" = NULL),
+    "SK" = list("group" = "SK",
+                "region" = "Saskatchewan",
+                "sf" = NULL),
+    "MB" = list("group" = "MB",
+                "region" = "Manitoba",
+                "sf" = NULL),
+    "ON" = list("group" = "ON",
+                "region" = "Ontario",
+                "sf" = NULL),
+    "QC" = list("group" = "QC",
+                "region" = "Quebec",
+                "sf" = NULL),
+    "AT" = list("group" = "AT",
+                "region" = "Atlantic",
+                "sf" = NULL),
+    "YK" = list("group" = "YK",
+                "region" = "Yukon",
+                "sf" = NULL))
 
   # Species table inputs ---------------------------------------------------------
   pmp_attributes <- c("Area (ha)", "Species at Risk (ECCC)",
@@ -77,7 +84,6 @@ app_global <- quote({
   ic_points <- sf::read_sf(file.path(data_path, "native_lands", "Communaute_Inuite_Inuit_Community.shp"))
 
   # Data structure fore First Nation reserves
-
   reserve_groups <<- list(
     "BC" = list("group" = "BC Reserves",
                 "path" = file.path(data_path, "native_lands", "reserves_bc.shp"),
