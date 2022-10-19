@@ -9,22 +9,35 @@ app_ui <- function(request) {
   # Leave this function for adding external resources
   golem_add_external_resources(),
   # Your application UI logic
-  tags$div(style="display: none;", "This will be hidden"),
   navbarPage(
-  "NCC Conservation Technology",
-  tabPanel(class="pmp_tool", "Project Evaluation - DEV",
+  title = div("", img(src = "www/logos/NCC_Icon_Logo_KO_F.png",
+                      height = "30px",
+                      width = "40px",
+                      style = "position: relative; margin:-15px 0px; display:right-align;")),
+
+  # Main application tab
+  tabPanel(class="pmp_tool", "Project Evaluation - dev",
 
 # Side-panel:-------------------------------------------------------------
     sidebarLayout(
       sidebarPanel(class = "side",
-      ## Overview ----
-      tabsetPanel(
-        tabPanel("Overview",
-          br(),
-          wellPanel(includeMarkdown( app_sys("app/text/overview.md"))),
 
-          # Logo
-          img(class='logo', src='www/logos/stacked_logo_rgb_en.png')),
+      ## Properties ----
+      tabsetPanel(
+        tabPanel("Properties",
+          br(),
+          tags$div(class = "container-layers",
+                   tags$div(class = "container-layers-buttons",
+          ### NCC parcel layer with national themes extracted
+          h5(class = "layers-title", "NCC Accomplishments"),
+          fluidRow(column(12,
+            prettyCheckboxGroup(inputId = "ncc_regions",
+                                label = "",
+                                status = "success",
+                                choices = c("BC", "AB", "SK", "MB",
+                                            "ON", "QC", "AT", "YK"),
+                                inline = TRUE,
+                                fill = FALSE)))))),
 
         ## Table ----
         tabPanel("Table",
@@ -70,8 +83,8 @@ app_ui <- function(request) {
           eng_table_UI(id = "eng_table_mod1"),
           br(),
 
-          tags$div(class = "indigenous-layers",
-          tags$div(class = "indigenous-layers-buttons",
+          tags$div(class = "container-layers",
+          tags$div(class = "container-layers-buttons",
           ### Native-lands.ca layers
           h5(class = "engagement-layers-title", a("Native-Land.ca", href="https://native-land.ca/", target="_blank")),
           fluidRow(column(12,
