@@ -10,7 +10,7 @@ app_ui <- function(request) {
   golem_add_external_resources(),
   # Your application UI logic
   navbarPage(
-  title = div("", img(src = "www/logos/NCC_Icon_Logo_KO_F.png",
+  title = div("", img(src = "logos/NCC_Icon_Logo_KO_F.png",
                       height = "30px",
                       width = "40px",
                       style = "position: relative; margin:-15px 0px; display:right-align;")),
@@ -250,6 +250,9 @@ app_ui <- function(request) {
 golem_add_external_resources <- function() {
   add_resource_path(
     "www", app_sys("app/www"))
+
+  add_resource_path(
+    "logos", app_sys("app/www/logos"))
 
   add_resource_path(
     "tiles", tile_path)
