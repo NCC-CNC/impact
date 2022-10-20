@@ -1,5 +1,5 @@
 
-server_load_themes <- quote({
+load_themes <- function() {
 
 # Read-in themes ---------------------------------------------------------------
 # Forest
@@ -101,5 +101,7 @@ names(spp_stack) <- c(
   "Reptiles_IUCN", "Species_at_Risk_NSC", "Endemics_NSC", "Biodiversity_NSC"
 )
 
-# Close quote
-})
+return(list("features" = feat_stack, "species" = spp_stack))
+
+# Close function
+}
