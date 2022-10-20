@@ -27,10 +27,10 @@ native_lands <- dplyr::bind_rows(list(territories,languages, treaties))
 write_sf(native_lands, file.path("inst", "extdata", "native_lands", "native_lands_all.geojson"))
 
 
-# Intersect layers
-NCC_NL <- st_intersection(native_lands, ncc)
+# Intersect layers & drop geometry
+NCC_NL <- st_intersection(native_lands, ncc) %>%
+  st_drop_geometry()
 
-# Drop geometry and save as geojson
-write_sf(NCC_NL, file.path("inst", "extdata", "native_lands", "native_lands_ncc.geojson"))
-
+# Save as .csv table
+write_sf(NCC_NL, file.path("inst", "extdata", "native_lands", "native_lands_ncc.csv"), encoding = "UTF-8")
 
