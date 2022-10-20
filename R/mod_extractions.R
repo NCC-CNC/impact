@@ -9,7 +9,7 @@ extractions_UI <- function(id) {
   )
 }
 
-extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_pmp_region) {
+extractions_SERVER <- function(id, user_pmp, proxy, user_pmp_region) {
   moduleServer(id, function(input, output, session) {
 
     # Return
@@ -25,15 +25,22 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
 
      tryCatch({
 
+       # Load themes on first extraction run
+       if (input$run_extractions == 1){
+         id_ <- showNotification("... loading data", duration = 0, closeButton=close)
+         theme_data <<- load_themes() # function that loads in all the rasters, store globally
+         removeNotification(id_)
+       }
+
        # Feature themes---------------------------------------------------------
-       id_ <- showNotification("... feature themes", duration = 0, closeButton=close)
+       id_ <- showNotification("extracting: habitat data", duration = 0, closeButton=close)
 
        # Project to Canada Albers Equal Area Conic (national grid)
        user_pmp_102001 <- user_pmp() %>%
          st_transform(crs = st_crs("+proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"))
 
-       # Extract
-       user_pmp_feat <- exact_extract(feat_stack, user_pmp_102001, fun = "sum", force_df = TRUE)
+       # Extract features (land cover, climate, recreation, etc.)
+       user_pmp_feat <- exact_extract(theme_data$features, user_pmp_102001, fun = "sum", force_df = TRUE)
        names(user_pmp_feat) <- gsub("sum.", "", names(user_pmp_feat))
        user_pmp_feat <- user_pmp_feat %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
@@ -41,10 +48,10 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        # Species themes---------------------------------------------------------
        incProgress(2)
        removeNotification(id_)
-       id_ <- showNotification("... species themes", duration = 0, closeButton=close)
+       id_ <- showNotification("extracting: species data", duration = 0, closeButton=close)
 
-       # Extract
-       user_pmp_spp <- exact_extract(spp_stack, user_pmp_102001, fun = "max", force_df = TRUE)
+       # Extract species (ECCC, NSC, IUCN)
+       user_pmp_spp <- exact_extract(theme_data$species, user_pmp_102001, fun = "max", force_df = TRUE)
        names(user_pmp_spp) <- gsub("max.", "", names(user_pmp_spp))
        user_pmp_spp<- user_pmp_spp %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
@@ -68,7 +75,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        # Extract Native-Land.ca layers ----
        incProgress(3)
        removeNotification(id_)
-       id_ <- showNotification("... intersecting native-lands.ca layers", duration = 0, closeButton=close)
+       id_ <- showNotification("extracting: Indigenous data", duration = 0, closeButton=close)
        user_pmp_id <- user_pmp_mean %>% select(OBJECTID)
        native_lands_all <- geojsonsf::geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_all.geojson"))
        sf_use_s2(FALSE)

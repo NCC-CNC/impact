@@ -7,6 +7,14 @@ code {
   font-size: 100%;
 }
 
+a {
+  color: #2D602E;
+}
+
+hr {
+  margin-top: 0px;
+}
+
 /* nav bar */
 .navbar-default .navbar-brand{
   color: #FFF;
@@ -44,55 +52,6 @@ code {
   background-color: #33862B !important;
 }
 
-.basemap-controls{
-  position: absolute;
-  top: 5px;
-  left: 60px;
-  width: 135px;
-}
-
-.basemap-title {
-  z-index: 9999;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: -20px;
-  padding: 5px 0px;
-  background-color: #FFF;
-}
-
-.raster-controls{
-  position: absolute;
-  top: 5px;
-  left: 60px;
-  width: 135px;
-}
-
-.region-controls{
-  position: absolute;
-  top: 5px;
-  left: 200px;
-  width: auto;
-}
-
-.raster-title {
-  z-index: 9999;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: -20px;
-  padding: 5px 0px;
-  color: #000;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-
-}
-
-.info.legend.leaflet-control.sidelegend {
-  opacity: 1 !important;
-  z-index: 9999;
-  background: white;
-
-}
 
 /* table and histogram titles */
 .property-title {
@@ -107,10 +66,6 @@ code {
 
 .parcel-title {
   font-family: Verdana;
-}
-
-hr {
-  margin-top: 0px;
 }
 
 .shiny-notification-message {
@@ -152,10 +107,6 @@ hr {
 
 .btn-compare .btn-default  {
   color: #33862B;
-}
-
-a {
-  color: #2D602E;
 }
 
 .theme-selection {
@@ -204,6 +155,8 @@ a {
 
 .layers-title {
   margin-bottom: 0px;
+  font-weight: 600;
+  color: #2D602E
 }
 
 /* leaflet loader */
@@ -265,7 +218,7 @@ a {
 }
 
 .continuous-legend p {
- font-weight: 400;
+ font-weight: 500;
 }
 
 .continuous-legend-flex {
@@ -316,3 +269,20 @@ a {
     padding-top: 2px;
     margin-left: -7px;
 }
+
+/* Drop down menue for polyhon upload*/
+
+.dropdown-menu.open {
+  max-height: 300px !important;
+}
+
+/* Data Table */
+
+table.dataTable thead th {
+  padding: 5px  9px 5px 9px !important;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+  padding: 4px 5px !important;
+}
+

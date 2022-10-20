@@ -9,6 +9,9 @@ app_server <- function(input, output, session) {
 #===============================================================================
   # Set inputs -----------------------------------------------------------------
 
+  # Hide side bar
+  shinyjs::hide("map_sidebar")
+
   ## Conservation themes (rasters) ----
   user_theme <- reactive({ as.character(input$theme_selection) })
 
@@ -61,9 +64,6 @@ app_server <- function(input, output, session) {
   ## Update map with conservation theme: ----
   eval(server_showtheme)
 
-  ## Read-in theme rasters ----
-  eval(server_load_themes)
-
 #===============================================================================
   # Extraction workflow --------------------------------------------------------
 
@@ -71,8 +71,6 @@ app_server <- function(input, output, session) {
   proxy <- leafletProxy("ncc_map")
   extracted  <- extractions_SERVER(id = "extractions_mod1",
                                    user_pmp,
-                                   feat_stack,
-                                   spp_stack,
                                    proxy,
                                    user_pmp_region)
 

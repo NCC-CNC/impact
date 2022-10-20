@@ -10,17 +10,18 @@ server_initmap <- quote ({
       fitBounds(-141.00002, 41.68132, -52.68001, 76.59341) %>%
 
       addSidebar(id = "map_sidebar",
-                 options = list(position = "right", fit = FALSE)) %>%
-
-       addMiniMap(toggleDisplay = T,
-                  tiles = providers$Esri.WorldStreetMap,
-                 position = "bottomleft") %>%
+                 options = list(position = "right")) %>%
 
       addMapPane("pmp_pane", zIndex = 600) %>% # Always top layer
 
+       addMiniMap(toggleDisplay = TRUE,
+                  tiles = providers$Esri.WorldStreetMap,
+                  position = "bottomleft",
+                  minimized = TRUE,) %>%
+
       addLayersControl(baseGroups = c("Topographic", "Imagery", "Streets"),
                        position = "bottomleft",
-                       options = layersControlOptions(collapsed = T)) %>%
+                       options = layersControlOptions(collapsed = TRUE)) %>%
 
       # Get mouse over coordinates
       htmlwidgets::onRender(
@@ -110,6 +111,7 @@ server_initmap <- quote ({
 
   ## Display updated user PMP ----
   observeEvent(user_pmp_upload_path(), {
+
     display_shp(user_pmp, "ncc_map")
 
     # Fields in attribute table
@@ -166,5 +168,7 @@ server_initmap <- quote ({
                       choices = c(""))
 
   })
+
+  shinyjs::show("map_sidebar")
 
 })
