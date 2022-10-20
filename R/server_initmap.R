@@ -169,4 +169,6 @@ server_initmap <- quote ({
 
   })
 
+  shinyjs::show("map_sidebar")
+
 })

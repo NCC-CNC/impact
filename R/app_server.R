@@ -9,6 +9,9 @@ app_server <- function(input, output, session) {
 #===============================================================================
   # Set inputs -----------------------------------------------------------------
 
+  # Hide side bar
+  shinyjs::hide("map_sidebar")
+
   ## Conservation themes (rasters) ----
   user_theme <- reactive({ as.character(input$theme_selection) })
 
