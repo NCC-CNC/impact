@@ -77,7 +77,7 @@ extractions_SERVER <- function(id, user_pmp, proxy, user_pmp_region) {
        removeNotification(id_)
        id_ <- showNotification("extracting: Indigenous data", duration = 0, closeButton=close)
        user_pmp_id <- user_pmp_mean %>% select(OBJECTID)
-       native_lands_all <- geojsonsf::geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_all.geojson"))
+       native_lands_all <- geojsonsf::geojson_sf(file.path(data_path, "native_lands", "native_lands_all.geojson"))
        sf_use_s2(FALSE)
        user_pmp_nl <- sf::st_intersection(native_lands_all, user_pmp_id)
        sf_use_s2(TRUE)
