@@ -52,6 +52,9 @@ app_server <- function(input, output, session) {
 #===============================================================================
   # Mapping workflow -----------------------------------------------------------
 
+  ## Initialize data structure: ----
+  eval(server_data_structure)
+
   ## Initialize leaflet map: ----
   eval(server_initmap)
 
