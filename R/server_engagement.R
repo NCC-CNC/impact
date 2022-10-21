@@ -30,6 +30,13 @@ server_engagement <- quote ({
                     fillOpacity = 0.3,
                     group = "Native Lands",
                     label = lapply(native_land_layer$Name, htmltools::HTML),
+                    labelOptions = labelOptions(
+                      style = list(
+                        "z-index" = "9999",
+                        "font-family" = "serif",
+                        "font-size" = "12px",
+                        "border-color" = "rgba(0,0,0,0.5)"
+                      )),
                     highlightOptions =
                       highlightOptions(weight = 10, color = native_land_layer$color)
                     )
@@ -59,6 +66,7 @@ server_engagement <- quote ({
         # Map reserve (only addPolygons once for province)
         leafletProxy("ncc_map") %>%
           hideGroup(reserve_names) %>%
+          addMapPane("fnr_pane", zIndex = 601) %>%
           addPolygons(data = reserve_groups[[input$reserves]]$sf,
                       group = reserve_groups[[input$reserves]]$group,
                       fillColor = "#ffff33",
@@ -66,6 +74,14 @@ server_engagement <- quote ({
                       weight = 1,
                       fillOpacity = 0.5,
                       label = ~NAME1,
+                      labelOptions = labelOptions(
+                                      style = list(
+                                        "z-index" = "9999",
+                                        "font-family" = "serif",
+                                        "font-size" = "12px",
+                                        "border-color" = "rgba(0,0,0,0.5)"
+                                        )),
+                      options = pathOptions(pane = "fnr_pane"),
                       highlightOptions =
                         highlightOptions(weight = 5, color = "#ffff33")) %>%
           showGroup(reserve_groups[[input$reserves]]$group)
@@ -119,6 +135,13 @@ server_engagement <- quote ({
         leafletProxy("ncc_map", data = fn_points) %>%
           addMapPane("fnl", zIndex = 700) %>%
           addCircleMarkers(label = ~BAND_NAME,
+                           labelOptions = labelOptions(
+                             style = list(
+                               "z-index" = "9999",
+                               "font-family" = "serif",
+                               "font-size" = "12px",
+                               "border-color" = "rgba(0,0,0,0.5)"
+                             )),
                            group = "First Nation Locations",
                            radius = 4,
                            color = "Black",
@@ -131,6 +154,13 @@ server_engagement <- quote ({
         leafletProxy("ncc_map", data = tc_points) %>%
           addMapPane("tc", zIndex = 699) %>%
           addCircleMarkers(label = ~TC_NAME,
+                           labelOptions = labelOptions(
+                             style = list(
+                               "z-index" = "9999",
+                               "font-family" = "serif",
+                               "font-size" = "12px",
+                               "border-color" = "rgba(0,0,0,0.5)"
+                             )),
                            group = "Tribal Councils",
                            radius = 7,
                            color = "Black",
@@ -143,6 +173,13 @@ server_engagement <- quote ({
         leafletProxy("ncc_map", data = ic_points) %>%
           addMapPane("ic", zIndex = 701) %>%
           addCircleMarkers(label = ~NAME,
+                           labelOptions = labelOptions(
+                             style = list(
+                               "z-index" = "9999",
+                               "font-family" = "serif",
+                               "font-size" = "12px",
+                               "border-color" = "rgba(0,0,0,0.5)"
+                             )),
                            group = "Inuit Communities",
                            radius = 4,
                            color = "Black",

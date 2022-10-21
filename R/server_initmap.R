@@ -78,6 +78,12 @@ server_initmap <- quote ({
                         group = ncc_parcels[[parcel]]$group,
                         layerId = ~id, # click event id selector
                         label = ~htmlEscape(NAME),
+                        labelOptions = labelOptions(
+                          style = list(
+                            "z-index" = "9999",
+                            "font-size" = "12px",
+                            "border-color" = "rgba(0,0,0,0.5)"
+                          )),
                         popup = PMP_popup(ncc_parcels[[parcel]]$sf), # fct_popup.R
                         fillColor = "#33862B",
                         color = "black",
