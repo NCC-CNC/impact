@@ -98,5 +98,43 @@ app_server <- function(input, output, session) {
                     user_pmp_parcel)
 
 #===============================================================================
+  # Help --------------------------------------------------------
+  ## properties
+  observeEvent(input$overview_switch, {
+    if (input$overview_switch) {
+      shinyjs::show("overview_txt")
+    } else {
+      shinyjs::hide("overview_txt")
+    }
+  })
+
+  ## table
+  observeEvent(input$table_switch, {
+    if (input$table_switch) {
+      shinyjs::show("table_txt")
+    } else {
+      shinyjs::hide("table_txt")
+    }
+  })
+
+  ## plot
+  observeEvent(input$plot_switch, {
+    if (input$plot_switch) {
+      shinyjs::show("plot_txt")
+    } else {
+      shinyjs::hide("plot_txt")
+    }
+  })
+
+  ## plot
+  observeEvent(input$indigenous_switch, {
+    if (input$indigenous_switch) {
+      shinyjs::show("indigenous_txt")
+    } else {
+      shinyjs::hide("indigenous_txt")
+    }
+  })
+
+#===============================================================================
 # Close app_server -------------------------------------------------------------
 }
