@@ -133,7 +133,7 @@ app_ui <- function(request) {
                                status = "success",
                                choices = c("Off", "Territories", "Languages", "Treaties"),
                                inline = TRUE,
-                               fill = TRUE))),
+                               fill = FALSE))),
 
           ### First Nation points
           h5(class = "engagement-layers-title",
@@ -161,7 +161,7 @@ app_ui <- function(request) {
                                choices = c("Off", "BC", "AB", "SK", "MB", "ON",
                                           "QC", "AT", "YK", "NWT", "NU"),
                                inline = TRUE,
-                               fill = TRUE)))
+                               fill = FALSE)))
           # Close indigenous tab
           ))
           # Close engagement tab
