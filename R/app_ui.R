@@ -75,9 +75,27 @@ app_ui <- function(request) {
               tags$div(class = "item",
                        tags$div(class = "tick"),
                        tags$label(class = "colorbar-label", p("100"))
-              )
-            ))
-      )),
+              )))),
+      br(),
+
+      # Overview help
+      wellPanel(fluidRow(
+        column(6,
+          h5(class = "layers-title", "Help")),
+        column(6, align="right",
+          prettySwitch(
+            inputId = "overview_switch",
+            value = TRUE,
+            inline = TRUE,
+            label = "",
+            status = "success",
+            slim = TRUE))),
+
+        tags$div(id = "overview_txt",
+          includeMarkdown(app_sys("app/text/overview.md")))),
+
+      # Close Properties tab
+      ),
 
         ## Table ----
         tabPanel("Table",
@@ -89,9 +107,24 @@ app_ui <- function(request) {
           property_title_UI(id = "property_mod1"),
           pmp_table_UI(id = "pmp_table_mod1"),
           br(),br(),
-          wellPanel(includeMarkdown(app_sys("app/text/table.md"))),
 
-          width="100%"),
+          # Table help
+          wellPanel(fluidRow(
+            column(6,
+                   h5(class = "layers-title", "Help")),
+            column(6, align="right",
+                   prettySwitch(
+                     inputId = "table_switch",
+                     value = TRUE,
+                     inline = TRUE,
+                     label = "",
+                     status = "success",
+                     slim = TRUE))),
+
+            tags$div(id = "table_txt",
+                     includeMarkdown(app_sys("app/text/table.md")))),
+
+          width = "100%"),
 
         ## Plots ----
         tabPanel("Plots",
@@ -113,7 +146,23 @@ app_ui <- function(request) {
             plotlyOutput("Lakes",height=115,width="100%"))))),
 
           br(),br(),
-          wellPanel(includeMarkdown(app_sys("app/text/plot.md")))),
+
+          # Plot help
+          wellPanel(fluidRow(
+            column(6,
+                   h5(class = "layers-title", "Help")),
+            column(6, align="right",
+                   prettySwitch(
+                     inputId = "plot_switch",
+                     value = TRUE,
+                     inline = TRUE,
+                     label = "",
+                     status = "success",
+                     slim = TRUE))),
+
+            tags$div(id = "plot_txt",
+                     includeMarkdown(app_sys("app/text/plot.md"))))
+          ),
 
         ## Engagement ----
         tabPanel("Engagement",
@@ -162,8 +211,26 @@ app_ui <- function(request) {
                                           "QC", "AT", "YK", "NWT", "NU"),
                                inline = TRUE,
                                fill = FALSE)))
-          # Close indigenous tab
-          ))
+          # Close indigenous layers
+          )),
+
+          br(),
+          # Indigenous help
+          wellPanel(fluidRow(
+            column(6,
+                   h5(class = "layers-title", "Help")),
+            column(6, align="right",
+                   prettySwitch(
+                     inputId = "indigenous_switch",
+                     value = TRUE,
+                     inline = TRUE,
+                     label = "",
+                     status = "success",
+                     slim = TRUE))),
+
+            tags$div(id = "indigenous_txt",
+                     includeMarkdown(app_sys("app/text/indigenous.md"))))
+
           # Close engagement tab
           )
         # Close tabsetPanel
@@ -232,8 +299,11 @@ app_ui <- function(request) {
     # Comparison modal ---------------------------------------------------------
     comparison_UI(id = "compare_mod1")
 
-  # Close mainPanel, # Close sidebarLayout,  Close tabPanel, # Close navbarPage
-  ))))
+  # Close mainPanel, # Close sidebarLayout,  Close Main tabPanel,
+  )))
+
+# Close navbarPage
+)
 # Close tagList, # Close app_ui
 )}
 
