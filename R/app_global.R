@@ -40,11 +40,10 @@ app_global <- quote({
     "Carbon Current (tonnes)", "Carbon Potential (tonnes per year)",
     "Freshwater (ha)", "Recreation (ha)")
 
-  pmp_values <- c("Area_ha","Species_at_Risk_ECCC","Amphibians_IUCN",
-    "Birds_IUCN","Mammals_IUCN","Reptiles_IUCN","Species_at_Risk_NSC",
-    "Endemics_NSC", "Biodiversity_NSC", "Forest", "Grassland", "Wetland",
-    "River", "Lakes", "Shoreline", "Climate_velocity", "Climate_refugia",
-    "Carbon_current", "Carbon_potential", "Freshwater", "Recreation")
+  pmp_values <- c("Area_ha", "ECCC_SAR", "IUCN_AMPH", "IUCN_BIRD", "IUCN_MAMM",
+    "IUCN_REPT","NSC_SAR", "NSC_END", "NSC_SPP", "Forest", "Grassland", "Wetland",
+    "River", "Lakes", "Shore", "Climate_V", "Climate_R", "Carbon_C", "Carbon_P",
+    "Freshwater", "Rec")
 
   # Read-in First Nation layers ------------------------------------------------
 
