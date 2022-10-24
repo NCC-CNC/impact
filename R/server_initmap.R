@@ -151,7 +151,7 @@ server_initmap <- quote ({
     clear_shp("upload_pmp", "ncc_map", "User PMP")
     # Disable buttons
     shinyjs::disable("extractions_mod1-run_extractions")
-    shinyjs::disable("report_mod1-run_report")
+    shinyjs::disable("download_mod1-download")
     shinyjs::disable("compare_tbl")
     shinyjs::disable("compare_plt")
 
