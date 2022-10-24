@@ -41,7 +41,7 @@ app_server <- function(input, output, session) {
 
   ## Disable buttons ----
   shinyjs::disable("extractions_mod1-run_extractions")
-  shinyjs::disable("report_mod1-run_report")
+  shinyjs::disable("download_mod1-download")
   shinyjs::disable("compare_tbl")
   shinyjs::disable("compare_plt")
 
@@ -80,7 +80,9 @@ app_server <- function(input, output, session) {
   ## Extractions successfully completed ----
   observeEvent(extracted$trigger, {
     if(extracted$flag == 1){
-      shinyjs::enable("report_mod1-run_report")
+      download_SERVER(id = "download_mod1",
+                      user_pmp_mean = reactive(extracted$user_pmp_mean))
+      shinyjs::enable("download_mod1-download")
       shinyjs::enable("compare_tbl")
       shinyjs::enable("compare_plt")
     }

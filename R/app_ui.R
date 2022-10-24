@@ -289,9 +289,9 @@ app_ui <- function(request) {
             wellPanel(includeMarkdown(app_sys("app/text/shp2.md"))),
             extractions_UI(id = "extractions_mod1"),
 
-            # Report button, hide for now ...
+            # Download button
             br(),
-            hidden(report_UI(id = "report_mod1")))
+            download_UI(id = "download_mod1"))
 
           # Close map-upload sidebar
           ),
