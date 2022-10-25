@@ -51,13 +51,13 @@ server_data_structure <- quote ({
                 "path" = file.path(data_path, "native_lands", "reserves_at.shp"),
                 "sf" = NULL),
     "YK" = list("group" = "YK Reserves",
-                "path" = file.path(data_path, "native_lands", "reserves_YK.shp"),
+                "path" = file.path(data_path, "native_lands", "reserves_yk.shp"),
                 "sf" = NULL),
     "NWT" = list("group" = "NWT Reserves",
-                 "path" = file.path(data_path, "native_lands", "reserves_NWT.shp"),
+                 "path" = file.path(data_path, "native_lands", "reserves_nwt.shp"),
                  "sf" = NULL),
     "NU" = list("group" = "NU Reserves",
-                "path" = file.path(data_path, "native_lands", "reserves_NU.shp"),
+                "path" = file.path(data_path, "native_lands", "reserves_nu.shp"),
                 "sf" = NULL))
 
   reserve_names <- unname(unlist(purrr::map_depth(reserve_groups, 1, "group")))
