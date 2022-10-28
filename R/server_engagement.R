@@ -97,14 +97,14 @@ server_engagement <- quote ({
 
       # Clear all reserves and then show the reserve that is cached
       leafletProxy("ncc_map") %>%
-        clearGroup(reserve_names) %>%
+        hideGroup(reserve_names) %>%
         showGroup(reserve_groups[[input$reserves]]$group)
     }
   } else {
 
     # Clear all reserves
     leafletProxy("ncc_map") %>%
-      clearGroup(reserve_names) %>%
+      hideGroup(reserve_names) %>%
     # Add ghost point to turn off css spinner
       addCircleMarkers(lng = -96.8165,
                        lat = 49.7713,
