@@ -5,48 +5,55 @@ server_engagement <- quote ({
 
     req(input$native_lands)
 
-    # Native lands layer
-    native_land_geojson <- reactive({
-      switch(as.character(input$native_lands),
-        "Off" = "off",
-         "Territories" = file.path(data_path, "native_lands", "native_lands_territories.geojson"),
-         "Languages" = file.path(data_path, "native_lands", "native_lands_languages.geojson"),
-         "Treaties" = file.path(data_path, "native_lands", "native_lands_treaties.geojson"))
-      })
-
     # Add native land layer to map
     if (input$native_lands != "Off") {
+      # Read-in data for first time selection
+      if (is.null(native_land_groups[[input$native_lands]]$sf)) {
+        # Read-in native land polygon
+        native_land_groups[[input$native_lands]]$sf <<-
+          geojsonsf::geojson_sf(native_land_groups[[input$native_lands]]$path) %>%
+            # sort polygons smallest to largest
+            dplyr::arrange(-area)
 
-      native_land_layer <- geojsonsf::geojson_sf(native_land_geojson())
-      # sort polygons smallest to largest
-      native_land_layer <- dplyr::arrange(native_land_layer, -area)
+        # Add to map
+        leafletProxy("ncc_map") %>%
+          hideGroup(native_land_names) %>%
+          addPolygons(data = native_land_groups[[input$native_lands]]$sf,
+                      fillColor = native_land_groups[[input$native_lands]]$sf$color,
+                      color = "black",
+                      weight = 1,
+                      fillOpacity = 0.3,
+                      group = native_land_groups[[input$native_lands]]$group,
+                      label = lapply(native_land_groups[[input$native_lands]]$sf$Name, htmltools::HTML),
+                      labelOptions = labelOptions(
+                        style = list(
+                          "z-index" = "9999",
+                          "font-family" = "serif",
+                          "font-size" = "12px",
+                          "border-color" = "rgba(0,0,0,0.5)"
+                        )),
+                      highlightOptions =
+                        highlightOptions(weight = 10, color = native_land_groups[[input$native_lands]]$sf$color)) %>%
+          showGroup(native_land_groups[[input$native_lands]]$group)
 
-      leafletProxy("ncc_map") %>%
-        clearGroup(group = "Native Lands") %>%
-        addPolygons(data = native_land_layer,
-                    fillColor = native_land_layer$color,
-                    color = "black",
-                    weight = 1,
-                    fillOpacity = 0.3,
-                    group = "Native Lands",
-                    label = lapply(native_land_layer$Name, htmltools::HTML),
-                    labelOptions = labelOptions(
-                      style = list(
-                        "z-index" = "9999",
-                        "font-family" = "serif",
-                        "font-size" = "12px",
-                        "border-color" = "rgba(0,0,0,0.5)"
-                      )),
-                    highlightOptions =
-                      highlightOptions(weight = 10, color = native_land_layer$color)
-                    )
+      } else {
+        # Hide all native land and then show the cached native land
+        leafletProxy("ncc_map") %>%
+          hideGroup(native_land_names) %>%
+          showGroup(native_land_groups[[input$native_lands]]$group)
+      }
     } else {
-      # Clear native land layers when off
+      # Hide all native lands
       leafletProxy("ncc_map") %>%
-        clearGroup(group = "Native Lands")
-
-    }
-
+        hideGroup(native_land_names) %>%
+        # Add ghost point to turn off css spinner
+        addCircleMarkers(lng = -96.8165,
+                         lat = 49.7713,
+                         radius = 0,
+                         fillOpacity = 0,
+                         stroke = FALSE,
+                         weight = 0)
+      }
   })
 
   # Listen for First Nation reserve selection ----
@@ -90,14 +97,14 @@ server_engagement <- quote ({
 
       # Clear all reserves and then show the reserve that is cached
       leafletProxy("ncc_map") %>%
-        hideGroup(reserve_names) %>%
+        clearGroup(reserve_names) %>%
         showGroup(reserve_groups[[input$reserves]]$group)
     }
   } else {
 
     # Clear all reserves
     leafletProxy("ncc_map") %>%
-      hideGroup(reserve_names) %>%
+      clearGroup(reserve_names) %>%
     # Add ghost point to turn off css spinner
       addCircleMarkers(lng = -96.8165,
                        lat = 49.7713,
