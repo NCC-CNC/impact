@@ -62,4 +62,17 @@ server_data_structure <- quote ({
 
   reserve_names <- unname(unlist(purrr::map_depth(reserve_groups, 1, "group")))
 
+  # Data structure fore Native-Land.ca
+  native_land_groups <- list(
+    "Territories" = list("group" = "Territories",
+                "path" = file.path(data_path, "native_lands", "native_lands_territories.geojson"),
+                "sf" = NULL),
+    "Languages" = list("group" = "Languages",
+                "path" = file.path(data_path, "native_lands", "native_lands_languages.geojson"),
+                "sf" = NULL),
+    "Treaties" = list("group" = "Treaties",
+                "path" = file.path(data_path, "native_lands", "native_lands_treaties.geojson"),
+                "sf" = NULL))
+
+  native_land_names <- unname(unlist(purrr::map_depth(native_land_groups, 1, "group")))
 })
