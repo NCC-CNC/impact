@@ -38,12 +38,10 @@ display_shp <- function (user_shp, map_id) {
                     fillColor = "grey",
                     color = "black",
                     group = "User PMP") %>%
-
-        addLayersControl(overlayGroups = c("Achievements", "User PMP"),
+        addLayersControl(overlayGroups = c("User PMP"),
                          baseGroups = c("Streets", "Imagery", "Topographic"),
                          position = "bottomleft",
-                         options = layersControlOptions(collapsed = F))
-
+                         options = layersControlOptions(collapsed = TRUE))
     }
 }
 #-------------------------------------------------------------------------------
@@ -54,10 +52,8 @@ clear_shp <- function(reset_input, map_id, layer_name){
   reset(reset_input)
   leafletProxy(map_id) %>%
     clearGroup(group = layer_name) %>%
-    addLayersControl(overlayGroups = c("Achievements"),
-                     baseGroups = c("Streets", "Imagery", "Topographic"),
+    addLayersControl(baseGroups = c("Streets", "Imagery", "Topographic"),
                      position = "bottomleft",
-                     options = layersControlOptions(collapsed = F))
-
+                     options = layersControlOptions(collapsed = T))
 
 }

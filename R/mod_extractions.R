@@ -9,30 +9,38 @@ extractions_UI <- function(id) {
   )
 }
 
-extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_pmp_region) {
+extractions_SERVER <- function(id, user_pmp, proxy, user_pmp_region) {
   moduleServer(id, function(input, output, session) {
 
     # Return
-    to_return <- reactiveValues(trigger = NULL, flag = NULL, user_pmp_mean = NULL)
+    to_return <- reactiveValues(trigger = NULL, flag = NULL, user_pmp_mean = NULL,
+                                user_pmp_nl = NULL)
 
     # Listen for run extraction button to be clicked
     observeEvent(input$run_extractions, {
 
     #Start progress bar
     withProgress(message = "Running extractions",
-                   value = 0, max = 3, {	incProgress(1)
+                   value = 0, max = 4, {	incProgress(1)
 
      tryCatch({
 
+       # Load themes on first extraction run
+       if (input$run_extractions == 1){
+         id_ <- showNotification("... loading data", duration = 0, closeButton=close)
+         theme_data <<- load_themes() # function that loads in all the rasters, store globally
+         removeNotification(id_)
+       }
+
        # Feature themes---------------------------------------------------------
-       id_ <- showNotification("... feature themes", duration = 0, closeButton=close)
+       id_ <- showNotification("extracting: habitat data", duration = 0, closeButton=close)
 
        # Project to Canada Albers Equal Area Conic (national grid)
        user_pmp_102001 <- user_pmp() %>%
          st_transform(crs = st_crs("+proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"))
 
-       # Extract
-       user_pmp_feat <- exact_extract(feat_stack, user_pmp_102001, fun = "sum", force_df = TRUE)
+       # Extract features (land cover, climate, recreation, etc.)
+       user_pmp_feat <- exact_extract(theme_data$features, user_pmp_102001, fun = "sum", force_df = TRUE)
        names(user_pmp_feat) <- gsub("sum.", "", names(user_pmp_feat))
        user_pmp_feat <- user_pmp_feat %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
@@ -40,10 +48,10 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        # Species themes---------------------------------------------------------
        incProgress(2)
        removeNotification(id_)
-       id_ <- showNotification("... species themes", duration = 0, closeButton=close)
+       id_ <- showNotification("extracting: species data", duration = 0, closeButton=close)
 
-       # Extract
-       user_pmp_spp <- exact_extract(spp_stack, user_pmp_102001, fun = "max", force_df = TRUE)
+       # Extract species (ECCC, NSC, IUCN)
+       user_pmp_spp <- exact_extract(theme_data$species, user_pmp_102001, fun = "max", force_df = TRUE)
        names(user_pmp_spp) <- gsub("max.", "", names(user_pmp_spp))
        user_pmp_spp<- user_pmp_spp %>%
          mutate(across(everything(), ~ replace_na(.x, 0)))
@@ -55,6 +63,7 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        user_pmp_mean <- user_pmp_mean %>%
          st_make_valid() %>%
          mutate("id" = row_number()) %>%
+         mutate("OBJECTID" = row_number()) %>% # Needed for native land table
          mutate("REGION" = user_pmp_region())
 
        # Calculate area ha
@@ -62,6 +71,16 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
 
        # Project to WGS
        user_pmp_mean <- st_transform(user_pmp_mean, crs = st_crs(4326))
+
+       # Extract Native-Land.ca layers ----
+       incProgress(3)
+       removeNotification(id_)
+       id_ <- showNotification("extracting: Indigenous data", duration = 0, closeButton=close)
+       user_pmp_id <- user_pmp_mean %>% select(OBJECTID)
+       native_lands_all <- geojsonsf::geojson_sf(file.path(data_path, "native_lands", "native_lands_all.geojson"))
+       sf_use_s2(FALSE)
+       user_pmp_nl <- sf::st_intersection(native_lands_all, user_pmp_id)
+       sf_use_s2(TRUE)
 
        # Update map---------------------------------------------------------------
        user_extent <- st_bbox(user_pmp_mean)
@@ -86,9 +105,10 @@ extractions_SERVER <- function(id, user_pmp, feat_stack, spp_stack, proxy, user_
        to_return$flag <- 1
        to_return$trigger <- input$run_extractions
        to_return$user_pmp_mean <- user_pmp_mean
+       to_return$user_pmp_nl <- user_pmp_nl
 
        # Finish progress bar
-       incProgress(3)
+       incProgress(4)
        removeNotification(id_)
        showNotification("... Extractions Completed!", duration = 5, closeButton=TRUE, type = 'message')
 

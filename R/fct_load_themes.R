@@ -1,5 +1,5 @@
 
-server_load_themes <- quote({
+load_themes <- function() {
 
 # Read-in themes ---------------------------------------------------------------
 # Forest
@@ -85,21 +85,21 @@ SPP_NSC <- rast(file.path(data_path, "themes", "albers",
 feat_stack <- c(frst, gras, wetl, rivr, laks, shrl, cfor, cref, csta, cseq, fwat, recr)
 feat_stack <- terra::setMinMax(feat_stack)
 
-names(feat_stack) <- c(
-  "Forest", "Grassland", "Wetland", "River", "Lakes", "Shoreline",
-  "Climate_velocity", "Climate_refugia", "Carbon_current", "Carbon_potential",
-  "Freshwater", "Recreation"
-)
+names(feat_stack) <- c("Forest", "Grassland", "Wetland", "River", "Lakes",
+                       "Shore", "Climate_V", "Climate_R",
+                       "Carbon_C", "Carbon_P","Freshwater",
+                       "Rec")
 
 
 # Stack species rasters --------------------------------------------------------
 
 spp_stack <- c(SAR, amph, bird, mamm, rept, SAR_NSC, END_NSC, SPP_NSC)
 spp_stack <- terra::setMinMax(spp_stack)
-names(spp_stack) <- c(
-  "Species_at_Risk_ECCC", "Amphibians_IUCN", "Birds_IUCN", "Mammals_IUCN",
-  "Reptiles_IUCN", "Species_at_Risk_NSC", "Endemics_NSC", "Biodiversity_NSC"
-)
+names(spp_stack) <- c("ECCC_SAR", "IUCN_AMPH", "IUCN_BIRD",
+                      "IUCN_MAMM","IUCN_REPT", "NSC_SAR",
+                      "NSC_END", "NSC_SPP")
 
-# Close quote
-})
+return(list("features" = feat_stack, "species" = spp_stack))
+
+# Close function
+}

@@ -2,76 +2,122 @@ server_initmap <- quote ({
 
   # Initialize leaflet map: ----------------------------------------------------
   output$ncc_map <- renderLeaflet({
-    leaflet() %>%
+    leaflet(options = leafletOptions(attributionControl = FALSE)) %>%
+      addTiles() %>%
       addProviderTiles(providers$Esri.WorldImagery, group = "Imagery") %>%
       addProviderTiles(providers$Esri.WorldStreetMap, group = "Streets") %>%
       addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
       fitBounds(-141.00002, 41.68132, -52.68001, 76.59341) %>%
 
       addSidebar(id = "map_sidebar",
-                 options = list(position = "right", fit = FALSE)) %>%
-
-      addMiniMap(tiles = providers$Esri.WorldStreetMap, toggleDisplay = T,
-                 position = "bottomleft") %>%
+                 options = list(position = "right")) %>%
 
       addMapPane("pmp_pane", zIndex = 600) %>% # Always top layer
 
-      addLayersControl(overlayGroups = c('Achievements'),
-                       baseGroups = c("Topographic", "Imagery", "Streets"),
-                       position = "bottomleft",
-                       options = layersControlOptions(collapsed = F)) %>%
+       addMiniMap(toggleDisplay = TRUE,
+                  tiles = providers$Esri.WorldStreetMap,
+                  position = "bottomleft",
+                  minimized = TRUE,) %>%
 
-      hideGroup("Achievements")
+      addLayersControl(baseGroups = c("Topographic", "Imagery", "Streets"),
+                       position = "bottomleft",
+                       options = layersControlOptions(collapsed = TRUE)) %>%
+
+      # Get mouse over coordinates
+      htmlwidgets::onRender(
+        "function(el,x){
+                    this.on('mousemove', function(e) {
+                        var lat = e.latlng.lat;
+                        var lng = e.latlng.lng;
+                        var coord = [lat, lng];
+                        Shiny.onInputChange('hover_coordinates', coord)
+                    });
+                    this.on('mouseout', function(e) {
+                        Shiny.onInputChange('hover_coordinates', null)
+                    })
+                }"
+      ) %>%
+
+      # Style layer control titles
+      htmlwidgets::onRender("
+        function() {
+          $('.leaflet-control-layers-list').prepend('<label style=\"text-align:center\">Basemaps</label>');
+        }
+    ") %>%
+
+      # Leaflet spinner for addPolygon
+      # https://davidruvolo51.github.io/shinytutorials/tutorials/leaflet-loading-screens/
+      htmlwidgets::onRender(., addPolygon_spinner_ugly_js)
 
   })
 
-  ## Display region achievement layer ----
-  observeEvent(user_region(), {
+  # Listen for NCC regions (accomplishment / parcel) selection
+  observeEvent(input$ncc_regions, {
 
-    if (length(user_region()) > 0) {
-
-    # Filter by region
-    PMP_region <- PMP_tmp %>%
-      dplyr::filter(stringr::str_detect(REGION, user_region()))
-
-    # Get extent
-    region_extent <- st_bbox(PMP_region)
-    leafletProxy("ncc_map") %>%
-      fitBounds(lng1  = region_extent[[1]], lat1 = region_extent[[2]],
-                lng2 =  region_extent[[3]], lat2 =  region_extent[[4]]) %>%
-
-    # Add achievement polygon
-    clearGroup("Achievements") %>%
-    showGroup("Achievements") %>%
-    addPolygons(data = PMP_region,
-                layerId = ~id, # click event id selector
-                group = "Achievements",
-                fillColor = "#33862B",
-                color = "black",
-                weight = 1,
-                fillOpacity = 0.7,
-                label = ~htmlEscape(NAME),
-                popup = PMP_popup(PMP_region), # fct_popup.R
-                options = pathOptions(pane = "pmp_pane"),
-                highlightOptions = highlightOptions(weight = 3, color = '#00ffd9')) %>%
-
-      addLayersControl(overlayGroups = c("Achievements"),
-                       baseGroups = c("Topographic", "Imagery", "Streets"),
-                       position = "bottomleft",
-                       options = layersControlOptions(collapsed = F))
-
+    # Hide NCC parcels if nothing is checked
+    if (length(input$ncc_regions) == 0) {
+      leafletProxy("ncc_map") %>%
+        hideGroup(c("AB", "BC", "SK", "MB", "ON", "QC", "AT", "YK")) %>%
+        # Add ghost point to turn off css spinner
+        addCircleMarkers(lng = -96.8165,
+                         lat = 49.7713,
+                         radius = 0,
+                         fillOpacity = 0,
+                         stroke = FALSE,
+                         weight = 0)
 
     } else {
-      # Clear achievements and zoom out to Canada
-      leafletProxy("ncc_map") %>%
-        clearGroup("Achievements") %>%
-        hideGroup("Achievements") %>%
-        fitBounds(-141.00002, 41.68132, -52.68001, 76.59341)
+
+      # Map NCC parcel
+      for (parcel in input$ncc_regions) {
+        # Subset and display parcel for first time selection
+        if (is.null(ncc_parcels[[parcel]]$sf)) {
+          ncc_parcels[[parcel]]$sf <<- dplyr::filter(PMP_tmp, REGION == ncc_parcels[[parcel]]$region)
+          leafletProxy("ncc_map") %>%
+            addPolygons(data = ncc_parcels[[parcel]]$sf,
+                        group = ncc_parcels[[parcel]]$group,
+                        layerId = ~id, # click event id selector
+                        label = ~htmlEscape(NAME),
+                        labelOptions = labelOptions(
+                          style = list(
+                            "z-index" = "9999",
+                            "font-size" = "12px",
+                            "border-color" = "rgba(0,0,0,0.5)"
+                          )),
+                        popup = PMP_popup(ncc_parcels[[parcel]]$sf), # fct_popup.R
+                        fillColor = "#33862B",
+                        color = "black",
+                        weight = 1,
+                        fillOpacity = 0.7,
+                        options = pathOptions(pane = "pmp_pane"),
+                        highlightOptions =
+                          highlightOptions(weight = 3, color = '#00ffd9')) %>%
+            showGroup(ncc_parcels[[parcel]]$group)
+
+        } else {
+         # Clear then show cached groups
+          ncc_groups <- c("BC", "AB", "SK", "MB", "ON", "QC", "AT", "YK")
+          ncc_clear <- ncc_groups[!(ncc_groups %in% input$ncc_regions)]
+          ncc_show <- ncc_groups[(ncc_groups %in% input$ncc_regions)]
+          leafletProxy("ncc_map") %>%
+            hideGroup(ncc_clear) %>%
+            showGroup(ncc_show) %>%
+            # Add ghost point to turn off css spinner
+            addCircleMarkers(lng = -96.8165,
+                             lat = 49.7713,
+                             radius = 0,
+                             fillOpacity = 0,
+                             stroke = FALSE,
+                             weight = 0)
+        }
+      }
     }
-  })
+  }, ignoreNULL = FALSE)
+
 
   ## Display updated user PMP ----
   observeEvent(user_pmp_upload_path(), {
+
     display_shp(user_pmp, "ncc_map")
 
     # Fields in attribute table
@@ -105,7 +151,7 @@ server_initmap <- quote ({
     clear_shp("upload_pmp", "ncc_map", "User PMP")
     # Disable buttons
     shinyjs::disable("extractions_mod1-run_extractions")
-    shinyjs::disable("report_mod1-run_report")
+    shinyjs::disable("download_mod1-download")
     shinyjs::disable("compare_tbl")
     shinyjs::disable("compare_plt")
 
@@ -128,5 +174,7 @@ server_initmap <- quote ({
                       choices = c(""))
 
   })
+
+  shinyjs::show("map_sidebar")
 
 })

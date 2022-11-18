@@ -2,7 +2,7 @@
 bar1 <- function(current = NULL, potential = NULL, goal = NULL, label = NULL) {
 
   # create data
-  d <- tibble(category = c("Current", "Potential", "Gap"),
+  d <- tibble::tibble(category = c("Current", "Potential", "Gap"),
               value0 = c(current, potential, goal),group = "group")
   # convert values to relative differences
   d$value <- c(d$value0[1],
@@ -11,20 +11,26 @@ bar1 <- function(current = NULL, potential = NULL, goal = NULL, label = NULL) {
 
   # convert to factor
   d <- d %>%
-    mutate(category = factor(category, levels = c("Gap", "Potential", "Current")))
+    dplyr::mutate(category = factor(category, levels = c("Gap", "Potential", "Current")))
 
   # remove zeros if needed
-  d <- d %>% filter(value > 0)
+  d <- d %>% dplyr::filter(value > 0)
 
   # plot data
-  p <- ggplot(d, aes(x = group, y = value)) +
-    geom_col(aes(fill = category), width = 0.8) +
+  p <- ggplot2::ggplot(data = d,
+                       mapping = aes(x = group, y = value)) +
+    geom_col(aes(fill = category,
+                 text = sprintf("%s: %s ha",
+                                category,
+                                format(value,
+                                       big.mark = ",",
+                                       scientific = FALSE))),
+             colour="black", size = 0.2,  width = 0.5) +
     coord_flip() +
-    scale_fill_manual(values = alpha(
-        c("Current" = "#1b9e77", "Potential" = "#d95f02", "Gap" = "#636363"),
-        c(1, 1, 0.5)
-      )
-    ) +
+    scale_fill_manual(
+      values = alpha(
+        c("Current" = "#1b9e77", "Potential" = "#d95f02", "Gap" = "#ffffff"),
+        c(1, 1, 0.5))) +
     ylab(label) +
     xlab("") +
     labs(fill = "") +
@@ -33,19 +39,25 @@ bar1 <- function(current = NULL, potential = NULL, goal = NULL, label = NULL) {
       axis.text.y = element_blank(),
       axis.ticks.y = element_blank()
     ) +
-    geom_hline(yintercept = goal, colour = "#636363", size = 1.2)
+    geom_hline(aes(yintercept = goal,
+                   text=sprintf("Goal: %s ha",
+                                format(goal,
+                                       big.mark = ",",
+                                       scientific = FALSE))),
+               colour = "#28282B", size = 0.8)
 
-  ggplotly(p) %>% config(displayModeBar = F)
+  # convert ggplot to plotly
+  plotly::ggplotly(p, tooltip = "text") %>%
+    plotly::config(displayModeBar = F) %>%
+    layout(hovermode = "x")
 
 }
-
-
 
 # User this function inside shiny
 plot_theme <- function(theme, sf, goals_csv, label = NULL) {
 
   renderPlotly({
-
+    suppressWarnings(
     bar1(current = goals_csv %>%
            filter(Regions == sf$REGION) %>%
            filter(Category == "current") %>%
@@ -58,7 +70,7 @@ plot_theme <- function(theme, sf, goals_csv, label = NULL) {
            filter(Category == "goal") %>%
            pull(theme) %>% round(0),
 
-         label = label)
+         label = label))
     })
 }
 

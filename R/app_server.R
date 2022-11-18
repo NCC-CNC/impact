@@ -9,11 +9,14 @@ app_server <- function(input, output, session) {
 #===============================================================================
   # Set inputs -----------------------------------------------------------------
 
+  # Hide side bar
+  shinyjs::hide("map_sidebar")
+
   ## Conservation themes (rasters) ----
   user_theme <- reactive({ as.character(input$theme_selection) })
 
-  ## Region achievements ----
-  user_region <- reactive({ as.character(input$Id083) })
+  # ## Region achievements ----
+  # user_region <- reactive({ as.character(input$Id083) })
 
   ## Map click
   map_click <- reactive({input$ncc_map_shape_click})
@@ -38,7 +41,7 @@ app_server <- function(input, output, session) {
 
   ## Disable buttons ----
   shinyjs::disable("extractions_mod1-run_extractions")
-  shinyjs::disable("report_mod1-run_report")
+  shinyjs::disable("download_mod1-download")
   shinyjs::disable("compare_tbl")
   shinyjs::disable("compare_plt")
 
@@ -49,17 +52,20 @@ app_server <- function(input, output, session) {
 #===============================================================================
   # Mapping workflow -----------------------------------------------------------
 
+  ## Initialize data structure: ----
+  eval(server_data_structure)
+
   ## Initialize leaflet map: ----
   eval(server_initmap)
 
   ## Listen for map click and render table/plots  ----
   eval(server_mapclick)
 
+  ## Engagement layers  ----
+  eval(server_engagement)
+
   ## Update map with conservation theme: ----
   eval(server_showtheme)
-
-  ## Read-in theme rasters ----
-  eval(server_load_themes)
 
 #===============================================================================
   # Extraction workflow --------------------------------------------------------
@@ -68,15 +74,15 @@ app_server <- function(input, output, session) {
   proxy <- leafletProxy("ncc_map")
   extracted  <- extractions_SERVER(id = "extractions_mod1",
                                    user_pmp,
-                                   feat_stack,
-                                   spp_stack,
                                    proxy,
                                    user_pmp_region)
 
   ## Extractions successfully completed ----
   observeEvent(extracted$trigger, {
     if(extracted$flag == 1){
-      shinyjs::enable("report_mod1-run_report")
+      download_SERVER(id = "download_mod1",
+                      user_pmp_mean = reactive(extracted$user_pmp_mean))
+      shinyjs::enable("download_mod1-download")
       shinyjs::enable("compare_tbl")
       shinyjs::enable("compare_plt")
     }
@@ -92,6 +98,44 @@ app_server <- function(input, output, session) {
                     goals_csv,
                     user_pmp_property,
                     user_pmp_parcel)
+
+#===============================================================================
+  # Help --------------------------------------------------------
+  ## properties
+  observeEvent(input$overview_switch, {
+    if (input$overview_switch) {
+      shinyjs::show("overview_txt")
+    } else {
+      shinyjs::hide("overview_txt")
+    }
+  })
+
+  ## table
+  observeEvent(input$table_switch, {
+    if (input$table_switch) {
+      shinyjs::show("table_txt")
+    } else {
+      shinyjs::hide("table_txt")
+    }
+  })
+
+  ## plot
+  observeEvent(input$plot_switch, {
+    if (input$plot_switch) {
+      shinyjs::show("plot_txt")
+    } else {
+      shinyjs::hide("plot_txt")
+    }
+  })
+
+  ## plot
+  observeEvent(input$indigenous_switch, {
+    if (input$indigenous_switch) {
+      shinyjs::show("indigenous_txt")
+    } else {
+      shinyjs::hide("indigenous_txt")
+    }
+  })
 
 #===============================================================================
 # Close app_server -------------------------------------------------------------
