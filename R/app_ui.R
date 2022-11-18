@@ -53,7 +53,7 @@ app_ui <- function(request) {
                                            "Forest" = "forest",
                                            "Grassland" = "grassland",
                                            "Wetland" = "wetland",
-                                           "Lakes" = "Lakes"),
+                                           "Lakes" = "lakes"),
                                 inline = TRUE,
                                 fill = FALSE)))),
 
