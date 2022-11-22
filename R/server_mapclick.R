@@ -33,7 +33,7 @@ server_mapclick <- quote ({
       ## Generate Table ----
       property_title_SERVER(id = "property_mod1",
                             data = user_pmp,
-                            property_field = "PROPERTY_N",
+                            property_field = "PRP_NAME",
                             parcel_field = "NAME")
 
       pmp_table_SERVER(id = "pmp_table_mod1",
@@ -49,7 +49,7 @@ server_mapclick <- quote ({
       shinyjs::show(id = "conditional_plots")
       property_title_SERVER(id = "property_mod2",
                             data = user_pmp,
-                            property_field = "PROPERTY_N",
+                            property_field = "PRP_NAME",
                             parcel_field = "NAME")
 
       output$Area <- plot_theme("Area_ha", user_pmp, goals_csv,  "Area (ha)")
@@ -62,7 +62,7 @@ server_mapclick <- quote ({
       ## Engagement ----
       property_title_SERVER(id = "property_mod3",
                             data = user_pmp,
-                            property_field = "PROPERTY_N",
+                            property_field = "PRP_NAME",
                             parcel_field = "NAME")
 
       eng_table_SERVER(id = "eng_table_mod1",
