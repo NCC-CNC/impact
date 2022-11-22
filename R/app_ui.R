@@ -29,7 +29,7 @@ app_ui <- function(request) {
           tags$div(class = "container-layers",
                    tags$div(class = "container-layers-buttons",
           ### NCC parcel layer with national themes extracted
-          h5(class = "layers-title", "NCC Accomplishments"),
+          h5(class = "layers-title", "NCC Public Accomplishments"),
           fluidRow(column(12,
             prettyCheckboxGroup(inputId = "ncc_regions",
                                 label = "",
