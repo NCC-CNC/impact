@@ -168,7 +168,6 @@ app_ui <- function(request) {
         tabPanel("Engagement",
 
           property_title_UI(id = "property_mod3"),
-          br(),
           eng_table_UI(id = "eng_table_mod1"),
           br(),
 
