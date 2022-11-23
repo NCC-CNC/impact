@@ -99,8 +99,7 @@ eng_table_SERVER <- function(id, oid = NULL, nl_ncc = NULL, dt_proxy = NULL) {
     if (is.null(dt_proxy)) {
       output$eng_table <- renderDT({
         eng_empty_table()
-      }, escape = FALSE)
-
+      })
     } else {
 
       # Build native lands table ----

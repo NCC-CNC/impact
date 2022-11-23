@@ -77,7 +77,7 @@ server_initmap <- quote ({
             addPolygons(data = ncc_parcels[[parcel]]$sf,
                         group = ncc_parcels[[parcel]]$group,
                         layerId = ~id, # click event id selector
-                        label = ~htmlEscape(NAME),
+                        label = lapply(paste(ncc_parcels[[parcel]]$sf$PRP_NAME, "<br>", ncc_parcels[[parcel]]$sf$NAME), htmltools::HTML),
                         labelOptions = labelOptions(
                           style = list(
                             "z-index" = "9999",

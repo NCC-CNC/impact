@@ -29,7 +29,7 @@ app_ui <- function(request) {
           tags$div(class = "container-layers",
                    tags$div(class = "container-layers-buttons",
           ### NCC parcel layer with national themes extracted
-          h5(class = "layers-title", "NCC Accomplishments"),
+          h5(class = "layers-title", "NCC Public Accomplishments"),
           fluidRow(column(12,
             prettyCheckboxGroup(inputId = "ncc_regions",
                                 label = "",
@@ -53,7 +53,7 @@ app_ui <- function(request) {
                                            "Forest" = "forest",
                                            "Grassland" = "grassland",
                                            "Wetland" = "wetland",
-                                           "Lakes" = "Lakes"),
+                                           "Lakes" = "lakes"),
                                 inline = TRUE,
                                 fill = FALSE)))),
 
@@ -105,7 +105,8 @@ app_ui <- function(request) {
           label = "Compare", icon = icon("sliders-h"))),
 
           property_title_UI(id = "property_mod1"),
-          pmp_table_UI(id = "pmp_table_mod1"),
+          tags$div(style = "overflow:auto; width:100%;position:relative;",
+          pmp_table_UI(id = "pmp_table_mod1")),
           br(),br(),
 
           # Table help
@@ -128,16 +129,17 @@ app_ui <- function(request) {
 
         ## Plots ----
         tabPanel("Plots",
-          br(),
+
           tags$div(class= "btn-compare",
           actionButton(style = "float: right;", inputId = "compare_plt",
           label = "Compare", icon = icon("sliders-h"))),
+
+          property_title_UI(id = "property_mod2"),
 
           br(),
           hidden(div(id = "conditional_plots",
           withSpinner(color = "#33862B", size = 1,
           tagList(
-            property_title_UI(id = "property_mod2"),
             plotlyOutput("Area",height=115,width="100%"),
             plotlyOutput("Forest",height=115,width="100%"),
             plotlyOutput("Grassland",height=115,width="100%"),
@@ -168,7 +170,6 @@ app_ui <- function(request) {
         tabPanel("Engagement",
 
           property_title_UI(id = "property_mod3"),
-          br(),
           eng_table_UI(id = "eng_table_mod1"),
           br(),
 

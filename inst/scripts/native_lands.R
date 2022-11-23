@@ -5,7 +5,7 @@ library(dplyr)
 sf_use_s2(FALSE)
 
 # Get extent (polygon) of NCC accomplishments
-ncc_extent <- read_sf("inst/extdata/achievements/NCC_Accomplishments_April_2022.shp")  %>%
+ncc_extent <- read_sf("inst/extdata/achievements/NCC_20221122.shp")  %>%
   st_transform(crs = st_crs(4326)) %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
   st_bbox() %>%
@@ -64,5 +64,3 @@ for (request in map_request) {
   write_sf(native_lands_canada, paste0("inst/extdata/native_lands/native_lands_", request, ".geojson"))
 
 }
-
-

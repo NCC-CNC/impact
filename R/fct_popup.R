@@ -1,11 +1,10 @@
 
 PMP_popup <- function(data, user = F){
   if (user == F) {
-   popup <- paste0("<strong>Property: </strong>", data[["PROPERTY_N"]],
+   popup <- paste0("<strong>Property: </strong>", data[["PRP_NAME"]],
                    "<br> <strong>Parcel: </strong>", data[["NAME"]],
-                   "<br> <strong>Intrest: </strong>", data[["CURRENT_NC"]],
-                   "<br> <strong>Achievement: </strong>", data[["ACHIEVMNT"]],
-                   "<br> <strong>Securment Date: </strong>", data[["DATE_SECUR"]])
+                   "<br> <strong>Intrest: </strong>", data[["PCL_INTERE"]],
+                   "<br> <strong>Securment Date: </strong>", data[["SE_DATE"]])
   } else {
     # Get fields names
     fields <- colnames(data)
@@ -120,8 +119,6 @@ pmp_empty_table <- function(attributes) {
                            pmp_df, rownames=FALSE, colnames = colnames, extensions = c('FixedColumns',"FixedHeader"),
                            options = list(dom = 't',
                                           ordering = ordering,
-                                          scrollX = TRUE,
-                                          scrollY = 'auto',
                                           paging=FALSE,
                                           fixedHeader=TRUE,
                                           fixedColumns = list(leftColumns = 1, rightColumns = 0)))
