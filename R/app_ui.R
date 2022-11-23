@@ -105,7 +105,8 @@ app_ui <- function(request) {
           label = "Compare", icon = icon("sliders-h"))),
 
           property_title_UI(id = "property_mod1"),
-          pmp_table_UI(id = "pmp_table_mod1"),
+          tags$div(style = "overflow:auto; width:100%;position:relative;",
+          pmp_table_UI(id = "pmp_table_mod1")),
           br(),br(),
 
           # Table help
@@ -128,16 +129,17 @@ app_ui <- function(request) {
 
         ## Plots ----
         tabPanel("Plots",
-          br(),
+
           tags$div(class= "btn-compare",
           actionButton(style = "float: right;", inputId = "compare_plt",
           label = "Compare", icon = icon("sliders-h"))),
+
+          property_title_UI(id = "property_mod2"),
 
           br(),
           hidden(div(id = "conditional_plots",
           withSpinner(color = "#33862B", size = 1,
           tagList(
-            property_title_UI(id = "property_mod2"),
             plotlyOutput("Area",height=115,width="100%"),
             plotlyOutput("Forest",height=115,width="100%"),
             plotlyOutput("Grassland",height=115,width="100%"),

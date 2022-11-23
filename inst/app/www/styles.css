@@ -286,3 +286,14 @@ table.dataTable tbody th, table.dataTable tbody td {
   padding: 4px 5px !important;
 }
 
+.dataTables_scrollHeadInner{
+    width: 100% !important;
+}
+.dataTables_scrollHeadInner table{
+    width: 100% !important;
+}
+
+#pmp_table_mod1-pmp_table .dataTables_scrollHead {
+  padding-top: 5px;
+  padding-bottom: 15px;
+}

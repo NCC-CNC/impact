@@ -13,7 +13,6 @@ eng_empty_table <- function() {
                            options = list(dom = 't',
                                           ordering = ordering,
                                           scrollX = TRUE,
-                                          scrollY = 'auto',
                                           paging=FALSE,
                                           fixedHeader=TRUE,
                                           fixedColumns = list(leftColumns = 1, rightColumns = 0)))

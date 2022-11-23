@@ -119,8 +119,6 @@ pmp_empty_table <- function(attributes) {
                            pmp_df, rownames=FALSE, colnames = colnames, extensions = c('FixedColumns',"FixedHeader"),
                            options = list(dom = 't',
                                           ordering = ordering,
-                                          scrollX = TRUE,
-                                          scrollY = 'auto',
                                           paging=FALSE,
                                           fixedHeader=TRUE,
                                           fixedColumns = list(leftColumns = 1, rightColumns = 0)))
