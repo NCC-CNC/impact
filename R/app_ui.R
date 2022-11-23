@@ -16,7 +16,7 @@ app_ui <- function(request) {
                       style = "position: relative; margin:-15px 0px; display:right-align;")),
 
   # Main application tab
-  tabPanel(class="pmp_tool", "Project Evaluation - dev",
+  tabPanel(class="pmp_tool", "Project Evaluation",
 
 # Side-panel:-------------------------------------------------------------
     sidebarLayout(

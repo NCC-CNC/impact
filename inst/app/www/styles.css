@@ -45,7 +45,7 @@ hr {
 }
 
 .sidebar-header{
-  background-color: #33862B !important;
+  background-color: #2D602E !important;
 }
 
 .sidebar-tabs > li.active, .sidebar-tabs > ul > li.active {
@@ -85,7 +85,8 @@ hr {
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
   color: #FFF;
-  background-color: #33862B;
+  background-color: #2D602E;
+  font-size: 18px;
 
 }
 
