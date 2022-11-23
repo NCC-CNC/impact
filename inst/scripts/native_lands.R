@@ -64,5 +64,3 @@ for (request in map_request) {
   write_sf(native_lands_canada, paste0("inst/extdata/native_lands/native_lands_", request, ".geojson"))
 
 }
-
-

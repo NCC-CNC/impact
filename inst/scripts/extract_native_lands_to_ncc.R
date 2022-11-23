@@ -32,4 +32,3 @@ NCC_NL <- st_intersection(native_lands, ncc) %>%
 
 # Save as .csv table
 write_sf(NCC_NL, file.path("inst", "extdata", "native_lands", "native_lands_ncc.csv"), encoding = "UTF-8")
-
