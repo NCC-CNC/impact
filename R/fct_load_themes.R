@@ -62,7 +62,7 @@ bird <- rast(file.path(data_path, "themes", "albers",
 
 # Mammal - IUCN
 mamm <- rast(file.path(data_path, "themes", "albers",
-  "bird_sum.tif"))
+  "mamm_sum.tif"))
 
 # Reptile - ICUN
 rept <- rast(file.path(data_path, "themes", "albers",
