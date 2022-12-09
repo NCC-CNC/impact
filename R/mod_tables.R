@@ -1,6 +1,5 @@
-
 #-------------------------------------------------------------------------------
-# PMP plot and table titles
+# Property and parcel names
 property_title_UI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -29,7 +28,7 @@ property_title_SERVER <- function(id, data, property_field, parcel_field) {
 }
 
 #-------------------------------------------------------------------------------
-# PMP table outputs
+# Conservation table UI
 pmp_table_UI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -37,6 +36,7 @@ pmp_table_UI <- function(id) {
   )
 }
 
+# Conservation table SERVER
 pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
                              region, goals_csv, dt_proxy = NULL, modal = F) {
   moduleServer(id, function(input, output, session) {
@@ -45,14 +45,15 @@ pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
     if (modal == F & is.null(dt_proxy)) {
       output$pmp_table <- renderDT({
         pmp_empty_table(attributes = attributes)
-    })}
+      })
+      # Populate table even when Tbl. tab is not selected
+      outputOptions(output, "pmp_table", suspendWhenHidden = FALSE)
+    }
 
     # Update table with pulled values ----
     if (modal == F & !is.null(dt_proxy)) {
-
       DT::replaceData(
         proxy = dt_proxy,
-        resetPaging = FALSE,
         rownames = FALSE,
         PMP_table(
           data = data,
@@ -61,14 +62,12 @@ pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
           property = property,
           parcel = parcel,
           region = region,
-          goals_csv = goals_csv)
-      )}
+          goals_csv = goals_csv))
+      }
 
     # Render modal table ----
     if (modal == T & is.null(dt_proxy)) {
-
       output$pmp_table <- renderDT({
-
         PMP_table(
           data = data,
           attributes = attributes,
@@ -77,12 +76,12 @@ pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
           parcel = parcel,
           region = region,
           goals_csv = goals_csv)
-  })}
-})
+      })
+    }
+  })
 }
 
 #-------------------------------------------------------------------------------
-
 # Engagement table UI
 eng_table_UI <- function(id) {
   ns <- NS(id)
@@ -95,24 +94,22 @@ eng_table_UI <- function(id) {
 eng_table_SERVER <- function(id, oid = NULL, nl_ncc = NULL, dt_proxy = NULL) {
   moduleServer(id, function(input, output, session) {
 
-    # Render empty table ----
+    # Render empty native lands table ----
     if (is.null(dt_proxy)) {
       output$eng_table <- renderDT({
         eng_empty_table()
       })
+      # Populate table even when ENG. tab are not selected
+      outputOptions(output, "eng_table", suspendWhenHidden = FALSE)
     } else {
-
       # Build native lands table ----
       DT::replaceData(
         proxy = dt_proxy,
-        resetPaging = FALSE,
         rownames = FALSE,
         eng_table(
           oid = oid,
-          nl_ncc = nl_ncc
-        )
-      )}
+          nl_ncc = nl_ncc))
+      }
   })
 }
-
 
