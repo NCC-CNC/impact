@@ -62,12 +62,12 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
           local({
             my_i <- i
 
-            output[[paste0("Area_ha", my_i)]] <- plot_theme("Area_ha", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
-            output[[paste0("Forest", my_i)]] <- plot_theme("Forest", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
-            output[[paste0("Grassland", my_i)]] <- plot_theme("Grassland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
-            output[[paste0("Wetland", my_i)]] <- plot_theme("Wetland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
-            output[[paste0("River", my_i)]] <- plot_theme("River", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
-            output[[paste0("Lakes", my_i)]] <- plot_theme("Lakes", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,]$NAME)
+            output[[paste0("Area_ha", my_i)]] <- plot_theme("Area_ha", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("Forest", my_i)]] <- plot_theme("Forest", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("Grassland", my_i)]] <- plot_theme("Grassland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("Wetland", my_i)]] <- plot_theme("Wetland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("River", my_i)]] <- plot_theme("River", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("Lakes", my_i)]] <- plot_theme("Lakes", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
 
           })}
 
