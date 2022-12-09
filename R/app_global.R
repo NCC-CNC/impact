@@ -1,5 +1,8 @@
 app_global <- quote({
 
+  # File upload limit (1GB)
+  options(shiny.maxRequestSize = 1000*1024^2) # 1GB
+
   # Get system environmental variables ----
   env_data <- Sys.getenv("DATA_DIRECTORY")
   env_tiles <- Sys.getenv("TILE_DIRECTORY")
