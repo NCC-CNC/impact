@@ -6,14 +6,16 @@ PMP_popup <- function(data, user = F){
                    "<br> <strong>Intrest: </strong>", data[["PCL_INTERE"]],
                    "<br> <strong>Securment Date: </strong>", data[["SE_DATE"]])
   } else {
+
     # Get fields names
     fields <- colnames(data)
     remove <- c("geometry", "id", pmp_values)
     fields <- setdiff(fields, remove)
     popup <- ""
-    for (i in seq_along(fields)) {
+    for (i in fields) {
+      idx = which(fields == i)
       popup <- paste0(popup,
-               paste0("<strong>", fields[i],": </strong>", data[[i]], "<br>"))
+               paste0("<strong>", fields[idx],": </strong>", data[[i]], "<br>"))
     }
 
   }

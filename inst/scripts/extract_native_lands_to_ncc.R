@@ -4,10 +4,8 @@ library(dplyr)
 sf_use_s2(FALSE)
 
 # Read-in NCC achievements layer
-ncc <- read_sf(file.path("inst", "extdata", "achievements", "NCC_20221122.shp"))
-ncc <- st_transform(ncc, crs = 4326)
-ncc <- ncc %>% mutate(OBJECTID = row_number()) # Create unique ID for each row / polygon
-ncc <- ncc %>% select(OBJECTID)
+load(file.path("..", "impactextractions", "appdata", "basedata.RData"))
+ncc <- PMP_tmp
 
 # Read-in and rename native-lands.ca layers
 territories <- geojson_sf(file.path("inst", "extdata", "native_lands", "native_lands_territories.geojson")) %>%
@@ -31,4 +29,7 @@ NCC_NL <- st_intersection(native_lands, ncc) %>%
   st_drop_geometry()
 
 # Save as .csv table
-write_sf(NCC_NL, file.path("inst", "extdata", "native_lands", "native_lands_ncc.csv"), encoding = "UTF-8")
+write_sf(NCC_NL,
+  file.path("..", "impactextractions", "appdata", "native_lands",
+            "native_lands_ncc_20221122.csv"), encoding = "UTF-8")
+
