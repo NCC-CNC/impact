@@ -47,7 +47,7 @@ app_global <- quote({
 
   # Read-in First Nation layers ------------------------------------------------
 
-  nl_ncc <- data.table::fread(file.path(data_path, "native_lands", "native_lands_ncc.csv"), encoding = "UTF-8")
+  nl_ncc <- data.table::fread(file.path(data_path, "native_lands", "native_lands_ncc_20221122.csv"), encoding = "UTF-8")
 
   fn_points <- sf::read_sf(file.path(data_path, "native_lands", "Premiere_Nation_First_Nation.shp"))
 
