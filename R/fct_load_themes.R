@@ -3,19 +3,22 @@ load_themes <- function() {
 
 # Read-in themes ---------------------------------------------------------------
 # Forest
-frst <- rast(file.path(data_path, "themes", "albers",
-  "CA_forest_VLCE_2015_forest_only_ha_proj_scale.tif"))
+frst_lc <- rast(file.path(data_path, "themes", "albers",
+  "FOREST_LC_COMPOSITE_1KM.tif"))
+
+frst_lu <- rast(file.path(data_path, "themes", "albers",
+  "FOREST_LU_COMPOSITE_1KM.tif"))
 
 # Grassland
 gras <- rast(file.path(data_path, "themes", "albers",
-  "AAFC_LU2015_comb_masked_by_Prairie_grassland_comb.tif"))
+  "Grassland_AAFC_LUTS_Total_Percent.tif"))
 
 # Wetlands
 wetl <- rast(file.path(data_path, "themes", "albers",
   "Wetland_comb_proj_diss_90m_Arc.tif"))
 
 # Rivers
-rivr <- rast(file.path( data_path, "themes", "albers",
+rivr <- rast(file.path(data_path, "themes", "albers",
   "grid_1km_water_linear_flow_length_1km.tif"))
 
 # Lakes
@@ -26,23 +29,33 @@ laks <- rast(file.path(data_path, "themes", "albers",
 shrl <- rast(file.path(data_path, "themes", "albers",
   "Shoreline.tif"))
 
-# Climate
-cfor <- rast(file.path(data_path, "themes", "albers",
-  "fwdshortestpath.tif"))
+# Climate Forward Velocity
+cvel <- rast(file.path(data_path, "themes", "albers",
+  "Climate_FwdShortestPath_2080_RCP85.tif"))
 
+# Climate Refugia
 cref <- rast(file.path(data_path, "themes", "albers",
-  "NA_combo_refugia_sum45.tif"))
+  "Climate_Refugia_2080_RCP85.tif"))
 
-# Carbon
+## Climate Extremes
+cext <- rast(file.path(data_path, "themes", "albers",
+  "Climate_LaSorte_ExtremeHeatEvents.tif"))
+
+# Carbon Current
 csta <- rast(file.path(data_path, "themes", "albers",
-  "Carbon_Mitchell_2021_t.tif")) %>% terra::crop(cfor)
+  "Carbon_Mitchell_2021_t.tif")) %>% terra::crop(cvel)
 
+# Carbon Potential
 cseq <- rast(file.path(data_path, "themes", "albers",
-  "Carbon_Potential_NFI_2011_CO2e_t_year.tif")) %>% terra::crop(cfor)
+  "Carbon_Potential_NFI_2011_CO2e_t_year.tif")) %>% terra::crop(cvel)
 
 # Freshwater
 fwat <- rast(file.path(data_path, "themes", "albers",
   "water_provision_2a_norm.tif"))
+
+# Human Footprint Index
+hfi <- rast(file.path(data_path, "themes", "albers",
+  "CDN_HF_cum_threat_20221031_NoData.tif"))
 
 # Recreation
 recr <- rast(file.path(data_path, "themes", "albers",
@@ -76,20 +89,25 @@ SAR_NSC <- rast(file.path(data_path, "themes", "albers",
 END_NSC <- rast(file.path(data_path, "themes", "albers",
   "NSC_ENDsum.tif"))
 
-# Several species - NatureServe Canada
+# Common species - NatureServe Canada
 SPP_NSC <- rast(file.path(data_path, "themes", "albers",
   "NSC_SPPsum.tif"))
 
 # Stack feature rasters --------------------------------------------------------
 
-feat_stack <- c(frst, gras, wetl, rivr, laks, shrl, cfor, cref, csta, cseq, fwat, recr)
+feat_stack <- c(frst_lc, frst_lu, gras,
+                wetl, rivr, laks, shrl,
+                cvel, cref, cext,
+                csta, cseq,
+                fwat, hfi, recr)
+
 feat_stack <- terra::setMinMax(feat_stack)
 
-names(feat_stack) <- c("Forest", "Grassland", "Wetland", "River", "Lakes",
-                       "Shore", "Climate_V", "Climate_R",
-                       "Carbon_C", "Carbon_P","Freshwater",
-                       "Rec")
-
+names(feat_stack) <- c("Forest_LC", "Forest_LU", "Grassland",
+                       "Wetland", "River", "Lakes","Shore",
+                       "Climate_V", "Climate_R", "Climate_E",
+                       "Carbon_C", "Carbon_P",
+                       "Freshwater", "HF_IDX", "Rec")
 
 # Stack species rasters --------------------------------------------------------
 
