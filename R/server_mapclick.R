@@ -53,7 +53,7 @@ server_mapclick <- quote ({
                             parcel_field = "NAME")
 
       output$Area <- plot_theme("Area_ha", user_pmp, goals_csv,  "Area (ha)")
-      output$Forest <- plot_theme("Forest", user_pmp, goals_csv, "Forest (ha)")
+      output$Forest <- plot_theme("Forest_LC", user_pmp, goals_csv, "Forest LC (ha)")
       output$Grassland <- plot_theme("Grassland", user_pmp, goals_csv, "Grassland (ha)")
       output$Wetland <- plot_theme("Wetland", user_pmp, goals_csv, "Wetland (ha)")
       output$River <- plot_theme("River", user_pmp, goals_csv, "River (km)")
@@ -102,7 +102,7 @@ server_mapclick <- quote ({
                             parcel_field = user_pmp_parcel())
 
       output$Area <- plot_theme("Area_ha", user_pmp_new, goals_csv, "Area (ha)")
-      output$Forest <- plot_theme("Forest", user_pmp_new, goals_csv, "Forest (ha)")
+      output$Forest <- plot_theme("Forest_LC", user_pmp_new, goals_csv, "Forest LC (ha)")
       output$Grassland <- plot_theme("Grassland", user_pmp_new, goals_csv, "Grassland (ha)")
       output$Wetland <- plot_theme("Wetland", user_pmp_new, goals_csv, "Wetland (ha)")
       output$River <- plot_theme("River", user_pmp_new, goals_csv, "River (km)")
