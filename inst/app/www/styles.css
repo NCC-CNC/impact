@@ -279,22 +279,17 @@ hr {
 
 /* Data Table */
 
-table.dataTable thead th {
-  padding: 5px  9px 5px 9px !important;
+.dataTables_wrapper .dataTables_scroll .dataTables_scrollBody .dataTables_scrollTable {
+   width: 100% !important;
+}
+.dt-no-wrap {
+  white-space: nowrap;
 }
 
-table.dataTable tbody th, table.dataTable tbody td {
-  padding: 4px 5px !important;
+#pmp_table_mod1-pmp_table {
+  padding-top: 10px;
 }
 
-.dataTables_scrollHeadInner{
-    width: 100% !important;
-}
-.dataTables_scrollHeadInner table{
-    width: 100% !important;
-}
-
-#pmp_table_mod1-pmp_table .dataTables_scrollHead {
-  padding-top: 5px;
-  padding-bottom: 15px;
+#compare_mod1-pmp_table_mod2-pmp_table {
+  padding-top: 10px;
 }
