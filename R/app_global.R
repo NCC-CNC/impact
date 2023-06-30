@@ -35,18 +35,27 @@ app_global <- quote({
     locale = readr::locale(encoding = "latin1"))
 
   # Species table inputs ---------------------------------------------------------
-  pmp_attributes <- c("Area (ha)", "Species at Risk (ECCC)",
-    "Amphibians (IUCN)", "Birds (IUCN)", "Mammals (IUCN)","Reptiles (IUCN)",
-    "Species at Risk (NSC)", "Endemics (NSC)", "Biodiversity (NSC)",
-    "Forest (ha)", "Grassland (ha)", "Wetland (ha)", "River (km)", "Lakes (ha)",
-    "Shoreline (km)", "Climate Velocity (km/year)", "Climate Refugia (index)",
+  pmp_attributes <- c(
+    "Area (ha)",
+    "Species at Risk (ECCC)", "Amphibians (IUCN)", "Birds (IUCN)",
+    "Mammals (IUCN)", "Reptiles (IUCN)",
+    "Species at Risk (NSC)", "Endemic Species (NSC)", "Common Species (NSC)",
+    "Forest LC (ha)", "Forest LU (ha)", "Grassland (ha)", "Wetland (ha)",
+    "River (km)", "Lakes (ha)", "Shoreline (km)",
+    "Climate Velocity (km/year)", "Climate Refugia (index)", "Climate Extremes (index)",
     "Carbon Current (tonnes)", "Carbon Potential (tonnes per year)",
-    "Freshwater (ha)", "Recreation (ha)")
+    "Freshwater (ha)", "Human Footprint (index)",  "Recreation (ha)")
 
-  pmp_values <- c("Area_ha", "ECCC_SAR", "IUCN_AMPH", "IUCN_BIRD", "IUCN_MAMM",
-    "IUCN_REPT","NSC_SAR", "NSC_END", "NSC_SPP", "Forest", "Grassland", "Wetland",
-    "River", "Lakes", "Shore", "Climate_V", "Climate_R", "Carbon_C", "Carbon_P",
-    "Freshwater", "Rec")
+  pmp_values <- c(
+    "Area_ha",
+    "ECCC_SAR", "IUCN_AMPH", "IUCN_BIRD",
+    "IUCN_MAMM", "IUCN_REPT",
+    "NSC_SAR", "NSC_END", "NSC_SPP",
+    "Forest_LC", "Forest_LU", "Grassland", "Wetland",
+    "River", "Lakes", "Shore",
+    "Climate_V", "Climate_R", "Climate_E",
+    "Carbon_C", "Carbon_P",
+    "Freshwater", "HF_IDX", "Rec")
 
   # Read-in First Nation layers ------------------------------------------------
 
