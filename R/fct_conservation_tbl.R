@@ -19,7 +19,7 @@ pmp_empty_table <- function(attributes) {
 
   # 1 property per column
   pmp_df <- data.frame(attributes, values_pulled = NA)
-  colnames = c("Conservation Variable", "Estimated Values")
+  colnames = c("Conservation Variables:", "Estimated Values:")
   ordering = FALSE
 
   # render empty table
