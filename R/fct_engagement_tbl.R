@@ -7,18 +7,22 @@ eng_empty_table <- function() {
   ordering = FALSE
 
   # Render empty table
-  eng_dt <- DT::datatable( class = 'white-space: nowrap',
-                           escape = FALSE,
-                           eng_df, rownames = FALSE, colnames = colnames,  extensions = c('FixedColumns',"FixedHeader"),
-                           options = list(dom = 't',
-                                          ordering = ordering,
-                                          scrollX = TRUE,
-                                          paging=FALSE,
-                                          fixedHeader=TRUE,
-                                          fixedColumns = list(leftColumns = 1, rightColumns = 0)))
-
+  eng_dt <- DT::datatable(
+    class = 'cell-border stripe',
+    escape = FALSE,
+    eng_df,
+    rownames = FALSE,
+    colnames = colnames,
+    extensions = c('FixedColumns',"FixedHeader"),
+    options = list(dom = 't',
+      ordering = ordering,
+      scrollX = TRUE,
+      paging=FALSE,
+      fixedHeader=TRUE,
+      fixedColumns = list(leftColumns = 1, rightColumns = 0)
+    )
+  )
   return(eng_dt)
-
 }
 
 # Create native-lands.ca table

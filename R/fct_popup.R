@@ -50,8 +50,8 @@ PMP_table <- function(data, attributes, con_values, property, parcel, region, go
         pivot_wider(names_from = attributes, values_from = values_pulled)
 
       # 1 property per row
-      pmp_df <- rbind(pmp_df, pmp_row)
-
+      pmp_df <- rbind(pmp_df, pmp_row) %>%
+        mutate_all(~ prettyNum(., big.mark = ",", scientific = FALSE))
     }
 
     # Set data table parameters for multiple rows
@@ -59,15 +59,28 @@ PMP_table <- function(data, attributes, con_values, property, parcel, region, go
     ordering = TRUE
 
     ## Create table, 1 property per row, used for renderDT ----
-    pmp_dt <- DT::datatable( class = 'white-space: nowrap',
-                             pmp_df, rownames=FALSE, colnames = colnames, extensions = c('FixedColumns',"FixedHeader"),
-                             options = list(dom = 't',
-                                            ordering = ordering,
-                                            scrollX = TRUE,
-                                            scrollY = 'auto',
-                                            paging=FALSE,
-                                            fixedHeader=TRUE,
-                                            fixedColumns = list(leftColumns = 2, rightColumns = 0)))
+    pmp_dt <- DT::datatable(
+      pmp_df,
+      rownames = FALSE,
+      colnames = colnames,
+      extensions = c('FixedColumns', 'FixedHeader'),
+      options = list(
+        dom = 't',
+        ordering = ordering,
+        scroller = TRUE,
+        deferRender= TRUE,
+        scrollY = 'auto',
+        paging = FALSE,
+        autoWidth = FALSE,
+        fixedHeader = TRUE,
+        fixedColumns = list(leftColumns = 2),
+        columnDefs = list(
+          list(className = 'dt-no-wrap', targets = "_all"),
+          list(width = 'auto', targets = "_all")
+        )
+      ),
+      fillContainer = TRUE
+    )
 
   } else {
 
@@ -108,24 +121,6 @@ PMP_table <- function(data, attributes, con_values, property, parcel, region, go
   }
 }
 
-# Create an empty table to render
-pmp_empty_table <- function(attributes) {
-
-  # 1 property per column
-  pmp_df <- data.frame(attributes, values_pulled = NA, current = NA, goal = NA)
-  colnames = c("", "Potential", "Current", "Goal")
-  ordering = FALSE
-
-  # Render empty table
-  pmp_dt <- DT::datatable( class = 'white-space: nowrap',
-                           pmp_df, rownames=FALSE, colnames = colnames, extensions = c('FixedColumns',"FixedHeader"),
-                           options = list(dom = 't',
-                                          ordering = ordering,
-                                          paging=FALSE,
-                                          fixedHeader=TRUE,
-                                          fixedColumns = list(leftColumns = 1, rightColumns = 0)))
-}
-
 # TEST FUNCTION ----------------------------------------------------------------
 
 # pmp_selection <- PMP_tmp %>% dplyr::filter(id == 5)
@@ -139,4 +134,3 @@ pmp_empty_table <- function(attributes) {
 # test
 
 # pmp_empty_table(pmp_attributes)
-

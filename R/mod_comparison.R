@@ -48,7 +48,7 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
         for (i in 1:(nrow(user_pmp_mean()))) {
 
           area_plots[[i]] <- plotlyOutput(ns(paste0("Area_ha", i)), height=100,width="100%")
-          forest_plots[[i]] <- plotlyOutput(ns(paste0("Forest", i)), height=100,width="100%")
+          forest_plots[[i]] <- plotlyOutput(ns(paste0("Forest_LC", i)), height=100,width="100%")
           grassland_plots[[i]] <- plotlyOutput(ns(paste0("Grassland", i)), height=100,width="100%")
           wetland_plots[[i]] <- plotlyOutput(ns(paste0("Wetland", i)), height=100,width="100%")
           river_plots[[i]] <- plotlyOutput(ns(paste0("River", i)), height=100,width="100%")
@@ -63,7 +63,7 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
             my_i <- i
 
             output[[paste0("Area_ha", my_i)]] <- plot_theme("Area_ha", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
-            output[[paste0("Forest", my_i)]] <- plot_theme("Forest", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
+            output[[paste0("Forest_LC", my_i)]] <- plot_theme("Forest_LC", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
             output[[paste0("Grassland", my_i)]] <- plot_theme("Grassland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
             output[[paste0("Wetland", my_i)]] <- plot_theme("Wetland", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
             output[[paste0("River", my_i)]] <- plot_theme("River", user_pmp_mean()[my_i,], goals_csv, user_pmp_mean()[my_i,][[user_pmp_parcel()]])
@@ -87,7 +87,7 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
                         tags$div(class = "theme-selection",
                         selectInput(
                          inputId = ns("theme_selection"), "", width = "100%",
-                         choices = c("Area (ha)", "Forest (ha)", "Grassland (ha)",
+                         choices = c("Area (ha)", "Forest LC (ha)", "Grassland (ha)",
                                      "Wetland (ha)", "River (km)", "Lakes (ha)"))),
 
                        # Dynamically generated plots
@@ -97,7 +97,7 @@ comparison_SERVER <- function(id, modal_trigger, compare_tbl, compare_plt,
                         area_plots)),
 
                        conditionalPanel(
-                         condition = "input.theme_selection == 'Forest (ha)'", ns = ns,
+                         condition = "input.theme_selection == 'Forest LC (ha)'", ns = ns,
                          withSpinner(color = "#33862B", size = 1, proxy.height = "400px",
                          forest_plots)),
 

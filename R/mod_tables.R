@@ -55,14 +55,14 @@ pmp_table_SERVER <- function(id, data, attributes, con_values, property, parcel,
       DT::replaceData(
         proxy = dt_proxy,
         rownames = FALSE,
-        PMP_table(
+        PMP_table_single_property(
           data = data,
           attributes = attributes,
           con_values = con_values,
           property = property,
-          parcel = parcel,
-          region = region,
-          goals_csv = goals_csv))
+          parcel = parcel
+         )
+        )
       }
 
     # Render modal table ----
